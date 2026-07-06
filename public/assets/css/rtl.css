@@ -1,0 +1,39 @@
+.main-content {
+    padding-right: 280px;
+    padding-left: 30px;
+}
+.main-sidebar {
+    right: 0;
+    left: auto;
+}
+.navbar{
+    right: 250px;
+    left: 15px;
+}
+
+.main-footer {
+    padding: 20px 280px 20px 30px;
+}
+
+body.sidebar-mini .main-sidebar:after {
+    right: 0;
+    left: auto;
+}
+body.sidebar-mini .navbar{
+    right: 65px;
+    left: 15px;
+}
+ body.sidebar-mini .main-content, body.sidebar-mini .main-footer {
+     padding-left: 30px;
+
+}
+body.sidebar-mini .main-content, body.sidebar-mini .main-footer {
+    padding-right: 90px;
+}
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu {
+    right: 65px;
+    left: auto;
+}
+.dropdown-menu {
+    right: 0;
+}

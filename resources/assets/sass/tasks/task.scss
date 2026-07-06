@@ -1,0 +1,27 @@
+.section .task-sec-mbl-hdr {
+    @media (max-width: 665px) {
+        flex-wrap: wrap !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+.section .section-header .section-header-breadcrumb {
+    @media (max-width: 665px) {
+        flex-basis: 100% !important;
+        margin-top: 10px !important;
+    }
+}
+
+.section .section-header .float-right {
+    @media (max-width: 665px) {
+        width: 100% !important;
+        margin-top: 15px !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+
+        .select2-mobile-margin {
+            margin-right: 0 !important;
+        }
+    }
+}
+    

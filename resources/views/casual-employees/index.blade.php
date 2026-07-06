@@ -1,0 +1,261 @@
+@extends('layouts.app')
+@section('title')
+    {{ __('messages.employees.name') }}
+@endsection
+@section('page_css')
+    <link href="{{ asset('assets/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bs4-summernote/summernote-bs4.css') }}">
+@endsection
+@section('content')
+    <section class="section">
+        <div class="section-header item-align-right">
+            <h1>{{ __('messages.casual_employees.name') }}</h1>
+            <div class="section-header-breadcrumb float-right">
+                <div class="card-header-action mr-3 select2-mobile-margin">
+                </div>
+            </div>
+            @can('create_employees')
+                <div class="d-flex justify-content-between mb-3">
+                    <!-- Status Dropdown -->
+                    <div class="mr-3">
+                        <label for="statusDropdown">Branches</label>
+                        {{ Form::select('branches', $usersBranches ?? [], null, ['id' => 'filterBranch', 'class' => 'form-control select2', 'placeholder' => __('messages.placeholder.branches')]) }}
+                    </div>
+
+                    <div class="mr-3">
+                        <button id="exportButton" class="btn btnSecondary text-white " style="background: orange !important;">
+                            Export
+                        </button>
+                    </div>
+                    <!-- Add Employee Button -->
+                    <div class="float-right">
+                        <a href="{{ route('casual.employees.create') }}" class="btn btn-primary" style="line-height: 30px;">
+                            {{ __('messages.employees.add_employee') }}
+                        </a>
+                    </div>
+                </div>
+            @endcan
+        </div>
+        <div class="section-body">
+            <div class="card">
+                <div class="card-body">
+                    <div style="width:100%;">
+                        @include('casual-employees.table')
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    @include('casual-employees.templates.templates')
+@endsection
+@section('page_scripts')
+    <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ mix('assets/js/custom/custom-datatable.js') }}"></script>
+    <script src="{{ mix('assets/js/bs4-summernote/summernote-bs4.js') }}"></script>
+    <script src="{{ mix('assets/js/select2.min.js') }}"></script>
+@endsection
+@section('scripts')
+    <script src="{{ mix('assets/js/custom/input-price-format.js') }}"></script>
+
+    <script>
+        'use strict';
+
+
+        let tbl = $('#casualeEployeesTable').DataTable({
+            oLanguage: {
+                'sEmptyTable': Lang.get('messages.common.no_data_available_in_table'),
+                'sInfo': Lang.get('messages.common.data_base_entries'),
+                sLengthMenu: Lang.get('messages.common.menu_entry'),
+                sInfoEmpty: Lang.get('messages.common.no_entry'),
+                sInfoFiltered: Lang.get('messages.common.filter_by'),
+                sZeroRecords: Lang.get('messages.common.no_matching'),
+            },
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+            processing: true,
+            serverSide: true,
+
+            ajax: {
+                url: route('casual.employees.index'),
+                beforeSend: function() {
+                    startLoader();
+                },
+                data: function(d) {
+                    d.status = $('#statusDropdown').val(); // Pass selected status
+                    d.filterBranch = $("#filterBranch").val();
+                },
+                complete: function() {
+                    stopLoader();
+                }
+            },
+            order: [
+                [0, 'desc'] // Ordering by the hidden 'created_at' column (index 2) in descending order
+            ],
+            columnDefs: [{
+                targets: 0, // Adjust the index for the hidden 'created_at' column
+                orderable: true,
+                visible: false, // Hide the 'created_at' column
+            }],
+            columns: [{
+                    data: 'updated_at', // Ensure this matches the data key for created_at in your data source
+                    name: 'updated_at'
+                },
+                {
+                    data: function(row) {
+                        return row.branch?.name ?? "";
+                    },
+                    name: 'branch.name',
+                    width: "15%"
+                },
+
+                {
+                    data: function(row) {
+                        return row.code;
+                    },
+                    name: 'code',
+                    width: "8%"
+                }, {
+                    data: function(row) {
+                        return row.iqama_no;
+                    },
+                    name: 'iqama_no',
+                    width: "15%"
+                }, {
+                    data: function(row) {
+                        let element = document.createElement('textarea');
+                        element.innerHTML = row.name;
+                        return element.value;
+                    },
+                    name: 'name',
+                    width: "15%"
+                },
+
+                {
+                    data: function(row) {
+                        return renderActionButtons(row.id);
+                    },
+                    name: 'id',
+                    width: '10%'
+                }
+
+            ],
+            responsive: true // Enable responsive features
+        });
+
+        $(document).on('click', '.delete-btn', function(event) {
+            let assetCateogryId = $(event.currentTarget).data('id');
+            deleteItem(route('casual.employees.destroy', assetCateogryId), '#casualeEployeesTable',
+                "{{ __('messages.casual_employees.name') }}");
+        });
+
+        $('#statusDropdown,#filterBranch').change(function() {
+            tbl.ajax.reload(); // Reload DataTable with new status filter
+        });
+
+        $('#exportButton').on('click', function() {
+            const status = $('#statusDropdown').val() || 'all'; // or default status
+            const branchId = $("#filterBranch").val();
+
+            let exportUrl =
+                `{{ route('casual.employees.export', ['status' => ':status', 'branch' => ':branch']) }}`;
+            exportUrl = exportUrl.replace(':status', status);
+
+            if (branchId) {
+                exportUrl = exportUrl.replace(':branch', branchId);
+            } else {
+                exportUrl = exportUrl.replace('/:branch', '');
+            }
+
+            window.location.href = exportUrl;
+        });
+    </script>
+
+
+    <script>
+        // Define messages for translations
+        var messages = {
+            delete: "{{ __('messages.common.delete') }}",
+            edit: "{{ __('messages.common.edit') }}",
+            view: "{{ __('messages.common.view') }}"
+        };
+
+        // Define permissions
+        var permissions = {
+            updateItem: "{{ auth()->user()->can('update_employees') ? 'true' : 'false' }}",
+            deleteItem: "{{ auth()->user()->can('delete_employees') ? 'true' : 'false' }}",
+            viewItem: "{{ auth()->user()->can('view_employees') ? 'true' : 'false' }}"
+        };
+
+        // // Function to render action buttons based on permissions
+        // function renderActionButtons(id) {
+        //     let buttons = '';
+        //     if (permissions.updateItem === 'true') {
+        //         let editUrl = `{{ route('casual.employees.edit', ':id') }}`;
+        //         editUrl = editUrl.replace(':id', id);
+        //         buttons += `
+    //         <a title="${messages.edit}" href="${editUrl}" class="btn btn-warning action-btn has-icon edit-btn" style="float:right;margin:2px;">
+    //             <i class="fa fa-edit"></i>
+    //         </a>
+    //     `;
+        //     }
+        //     if (permissions.viewItem === 'true') {
+        //         let viewUrl = `{{ route('casual.employees.view', ':id') }}`;
+        //         viewUrl = viewUrl.replace(':id', id);
+        //         buttons += `
+    //         <a title="${messages.view}" href="${viewUrl}" class="btn btn-info action-btn has-icon view-btn" style="float:right;margin:2px;">
+    //             <i class="fa fa-eye"></i>
+    //         </a>
+    //     `;
+        //     }
+
+        //     if (permissions.deleteItem === 'true') {
+        //         buttons += `
+    //         <a title="${messages.delete}" href="#" class="btn btn-danger action-btn has-icon delete-btn" data-id="${id}" style="float:right;margin:2px;">
+    //             <i class="fa fa-trash"></i>
+    //         </a>
+    //     `;
+        //     }
+
+        //     return buttons;
+        // }
+        // Function to render action buttons based on permissions
+        function renderActionButtons(id) {
+            let buttons = '';
+
+            if (permissions.updateItem === 'true') {
+                let editUrl = `{{ route('casual.employees.edit', ':id') }}`;
+                editUrl = editUrl.replace(':id', id);
+                buttons += `
+                        <a title="${messages.edit}" href="${editUrl}" class="btn btn-warning action-btn has-icon edit-btn">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    `;
+            }
+
+            if (permissions.viewItem === 'true') {
+                let viewUrl = `{{ route('casual.employees.view', ':id') }}`;
+                viewUrl = viewUrl.replace(':id', id);
+                buttons += `
+                        <a title="${messages.view}" href="${viewUrl}" class="btn btn-info action-btn has-icon view-btn">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    `;
+            }
+
+            if (permissions.deleteItem === 'true') {
+                buttons += `
+                        <a title="${messages.delete}" href="#" class="btn btn-danger action-btn has-icon delete-btn" data-id="${id}">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    `;
+            }
+
+            // Wrap buttons in a flex container
+            return `<div class="action-buttons" style="display:flex; gap:5px; justify-content:flex-end;">${buttons}</div>`;
+        }
+    </script>
+@endsection

@@ -1,0 +1,20 @@
+.estimate-card {
+    min-height: 165px;
+}
+
+.estimate-action-btn {
+    margin: 25px 30px 0 0;
+}
+
+.section .section-header .float-right {
+    @media (max-width: 575px) {
+        width: 100% !important;
+        margin-top: 15px !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+
+        .select2-mobile-margin {
+            margin-right: 0 !important;
+        }
+    }
+}

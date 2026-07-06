@@ -1,0 +1,22 @@
+/* .main-content-rtl {
+    padding-right: 280px;
+    padding-left: 30px !important;
+}
+.main-sidebar-rtl {
+    right: 0 !important;
+    left: auto !important;;
+}
+
+.navbar-rtl {
+    right: 250px !important;
+    left: 15px!important;
+}
+
+.main-footer-rtl{
+    padding: 20px 280px 20px 30px !important;
+}
+
+body.sidebar-mini .main-sidebar:after {
+    right: 0;
+    left: auto;
+} */

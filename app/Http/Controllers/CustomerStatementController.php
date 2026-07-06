@@ -1,0 +1,194 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Queries\CustomerStatementDataTableNew;
+use Illuminate\Http\Request;
+use App\Repositories\PayslipRepository;
+use Yajra\DataTables\DataTables;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Exception;
+use App\Http\Requests\SalaryGenerateRequest;
+use App\Http\Requests\UpdateSalaryGenerateRequest;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+use Throwable;
+use App\Models\SalaryGenerate;
+use App\Models\SalarySheet;
+use App\Models\Salary;
+use App\Models\Bonus;
+use App\Models\Loan;
+use App\Models\Commission;
+use App\Models\Insurance;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Setting;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Response;
+use App\Models\Branch;
+
+class CustomerStatementController extends AppBaseController
+{
+
+    /**
+     * @var PayslipRepository
+     */
+    private $payslipRepository;
+    public function __construct(PayslipRepository $payslipRepo)
+    {
+        $this->payslipRepository = $payslipRepo;
+    }
+
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            return DataTables::of((new CustomerStatementDataTableNew())->get($request->all()))->make(true);
+        }
+
+        $customers = $this->payslipRepository->getCustomers();
+        $projects = $this->payslipRepository->getProjects();
+        $usersBranches = $this->getUsersBranches();
+
+        return view('customer_statements.index', compact(['customers', 'projects', 'usersBranches']));
+    }
+
+    public function export(Request $request)
+    {
+
+
+        $branch_name = '';
+        if (isset($request->filterBranch) && !empty($request->filterBranch)) {
+            $branch_id = $request->filterBranch;
+            $branch = Branch::where('id', $branch_id)->first();
+            if ($branch) {
+                $branch_name = "_" . str_replace(' ', '_', $branch->name);
+            }
+        }
+
+
+        if (!$request->has('customer_select') || !$request['customer_select']) {
+            return redirect()->back()->with('error', 'Customer ID is required.'); // Redirect back with an error message
+        }
+
+        $customer = Customer::with(['address.customerState'])->find($request['customer_select']);
+
+        // Retrieve data from DataTables
+        $data = DataTables::of((new CustomerStatementDataTableNew())->get($request->all()))->make(true);
+
+
+        $data = $data->getData()->data;
+
+
+        if ($request->type === 'csv') {
+
+
+            $csvData = [];
+
+            // Add the header row
+            $csvData[] = [
+                'Branch',
+                'Invoice No',
+                'Invoice Date',
+                'Receipt Date',
+                'Month',
+                'Project',
+                'Debit',
+                'Credit',
+                'Balance'
+            ];
+
+            // Initialize totals
+            $totalDebit = 0;
+            $totalCredit = 0;
+            $totalBalance = 0;
+
+            foreach ($data as $statement) {
+
+
+                // Calculate debit, credit, and balance from the statement
+                $debit = $statement->debit ?? 0.00;
+                $credit = $statement->credit ?? 0.00;
+                $balance = $statement->balance ?? 0.00;
+
+                // Accumulate totals
+                $totalDebit += $debit;
+                $totalCredit += $credit;
+                $totalBalance += $balance;
+
+                $csvData[] = [
+                    $statement->branch ?? '',
+                    $statement->invoice_number ?? '',
+                    $statement->invoice_date ?? '',
+                    $statement->receipt_date ?? '',
+                    $statement->invoice_date ?? '',
+                    $statement->project_name ?? '',
+                    number_format($debit, 2),
+                    number_format($credit, 2),
+                    number_format($balance, 2),
+                ];
+            }
+            // Add totals row at the bottom
+            $csvData[] = [
+                '', // Indicate totals in the first column
+                '', // Empty column for Invoice Date
+                '', // Empty column for Receipt Date
+                '', // Empty column for Month
+                'Total', // Empty column for Project
+                number_format($totalDebit, 2),
+                number_format($totalCredit, 2),
+                number_format($totalDebit - $totalCredit, 2),
+            ];
+
+
+
+
+            // Prepare CSV filename
+            $filename = 'customer_statements' . $branch_name . '.csv';
+
+            // Set the appropriate headers for the CSV download
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => "attachment; filename=\"$filename\"",
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0', // Disable caching
+                'Pragma' => 'no-cache', // Disable caching for HTTP/1.0
+                'Expires' => '0', // Ensure immediate expiration
+            ];
+
+            // Stream the CSV content to the browser
+            return response()->stream(function () use ($csvData) {
+                // Open output stream for writing CSV data
+                $handle = fopen('php://output', 'w');
+
+                // Write rows to the CSV output
+                foreach ($csvData as $row) {
+                    fputcsv($handle, $row);
+                }
+
+                // Close the handle after writing
+                fclose($handle);
+            }, 200, $headers);
+        } else if ($request->type === 'pdf') {
+            $settings = Setting::all()->pluck('value', 'key')->toArray();
+            $customer = Customer::with(['project'])->where('id', $request['customer_select'])->first();
+
+
+            // Data to pass to the view
+            $data = [
+                'settings' => $settings,
+                'statement' => $data,
+                'customer' => $customer,
+                'start_date' => $request['from_date'] ?? '',
+                'end_date' => $request['to_date'],
+                'branch_name' => $branch?->name ?? '',
+            ];
+
+
+            $pdf = PDF::loadView('customer_statements.pdf_v3', $data);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions(["isPhpEnabled" => true, 'isHtml5ParserEnabled' => true]);
+            return $pdf->download("customer_statements" . $branch_name . '.pdf');
+        }
+    }
+}

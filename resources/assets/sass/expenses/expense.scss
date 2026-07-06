@@ -1,0 +1,26 @@
+.section .expense-mbl-sec-hdr {
+    @media (max-width: 615px) {
+        flex-wrap: wrap !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+.section .section-header .section-header-breadcrumb {
+    @media (max-width: 615px) {
+        flex-basis: 100% !important;
+        margin-top: 10px !important;
+    }
+}
+
+.section .section-header .float-right {
+    @media (max-width: 615px) {
+        display: inline-block !important;
+        width: 100% !important;
+        margin-top: 15px !important;
+    }
+
+    @media (max-width: 575.98px) {
+        display: flex !important;
+        justify-content: flex-end !important;
+    }
+}

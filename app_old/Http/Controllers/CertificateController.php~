@@ -1,0 +1,153 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\CertificateRequest;
+use App\Models\Certificate;
+use App\Queries\CertificateDataTable;
+use App\Repositories\CertificateRepository;
+
+use Illuminate\Database\QueryException;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use App\Models\AssetCategory;
+use App\Http\Requests\UpdateCertificateRequest;
+use Laracasts\Flash\Flash;
+use Throwable;
+
+class CertificateController extends AppBaseController
+{
+    /**
+     * @var CertificateRepository
+     */
+    private $certificateRepository;
+    public function __construct(CertificateRepository $certificateRepo)
+    {
+        $this->certificateRepository = $certificateRepo;
+    }
+    /**
+     * @param  Request  $request
+     * @return Application|Factory|View
+     *
+     * @throws Exception
+     */
+    public function index(Request $request)
+    {
+//        dd('index',$request->ajax());
+        if ($request->ajax()) {
+            return DataTables::of((new CertificateDataTable())->get($request->all()))->make(true);
+        }
+//        dd('else',$request->ajax());
+
+        return view('certificate.index');
+    }
+
+    public function create()
+    {
+        $data = $this->certificateRepository->getSyncList();
+        return view('certificate.create', compact(['data']));
+    }
+
+    public function store(CertificateRequest $request)
+    {
+//        dd('store',$request->all());
+        $input = $request->all();
+        try {
+            $assetCategory = $this->certificateRepository->create($input);
+            activity()->causedBy(getLoggedInUser())
+                ->performedOn($assetCategory)
+                ->useLog('Certificate created.')
+                ->log($assetCategory->title . ' Certificate.');
+            Flash::success(__('messages.certificate.saved'));
+            return $this->sendResponse($assetCategory, __('messages.certificate.saved'));
+        } catch (Throwable $e) {
+            throw $e;
+        }
+    }
+    public function destroy(Certificate $category)
+    {
+        try {
+            $category->delete();
+            activity()->performedOn($category)->causedBy(getLoggedInUser())
+                ->useLog('Certificate deleted.')->log($category->title . ' Certificate deleted.');
+            return $this->sendSuccess('Certificate deleted successfully.');
+        } catch (QueryException $e) {
+            return $this->sendError('Failed to delete! Already in use.');
+        }
+    }
+
+    public function edit(Certificate $category)
+    {
+//        dd('$category',$category);
+//        dd('$category',$category['number_of_sample']);
+        $data = $this->certificateRepository->getSyncList();
+//        dd('edit',$data);
+        return view('certificate.edit', compact(['data', 'category']));
+    }
+    public function update(Certificate $category, UpdateCertificateRequest $updateCertificateRequest)
+    {
+        $input = $updateCertificateRequest->all();
+        $assetCategory = $this->certificateRepository->update($input, $updateCertificateRequest->id);
+        activity()->performedOn($assetCategory)->causedBy(getLoggedInUser())
+            ->useLog('Certificate Updated')->log($assetCategory->title . 'Certificate updated.');
+        Flash::success(__('messages.certificate.updated'));
+        return $this->sendSuccess(__('messages.certificate.updated'));
+    }
+    public function view($id)
+    {
+//        dd($id);
+        $data = $this->certificateRepository->getData($id);
+//        dd('view',$data['data']);
+        return view('certificate.view', compact(['data']));
+    }
+    public function export()
+    {
+        // Get sample receiving data
+        $sampleReceiving = $this->certificateRepository->getCertificateData();
+
+        // Prepare CSV data
+        $csvData = [];
+        $csvData[] = ['SL', 'Date', 'Time', 'Section', 'Client Name', 'Client Reference', 'Type Of Sample',
+            'Required Tests', 'Number Of Sample', 'Delivered By', 'Received By', 'Created At'];
+
+        foreach ($sampleReceiving as $index => $sampleReceive) {
+            $csvData[] = [
+                $index + 1, // Serial number
+                \Carbon\Carbon::parse($sampleReceive->date)->format('d-m-Y'),
+                \Carbon\Carbon::parse($sampleReceive->time)->format('h:i:s A'),
+                $sampleReceive->sample_categories_name,
+                $sampleReceive->client_name,
+                $sampleReceive->client_reference,
+                $sampleReceive->type_of_sample,
+                $sampleReceive->required_tests,
+                $sampleReceive->number_of_sample,
+                $sampleReceive->number_of_sample,
+                $sampleReceive->delivered_by_name,
+                $sampleReceive->received_by_name,
+                \Carbon\Carbon::parse($sampleReceive->created_at)->format('d-m-Y') // Created At formatted
+            ];
+        }
+
+        // Set the headers for the response
+        $filename = 'sample_receiving_export_' . now()->format('Y-m-d_H-i') . '.csv';
+        $handle = fopen('php://output', 'w');
+
+        // Send the headers to the browser
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        // Write each row of the CSV to the output
+        foreach ($csvData as $row) {
+            fputcsv($handle, $row);
+        }
+
+        fclose($handle);
+        exit; // Terminate the script
+    }
+}

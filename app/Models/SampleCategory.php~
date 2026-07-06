@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class SampleCategory extends Model
+{
+    use HasFactory;
+    protected $table = 'sample_categories';
+
+    public static $rules = [
+        'name' => 'required|unique:sample_categories,name'
+    ];
+    protected $fillable = [
+        'name',
+        'description'
+    ];
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'title' => 'string'
+    ];
+
+
+    public function services(){
+        return $this->hasMany(SampleReceiving::class,'sample');
+    }
+
+}

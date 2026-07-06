@@ -1,0 +1,237 @@
+@extends('layouts.app')
+@section('title')
+    {{ __('messages.employees.name') }}
+@endsection
+@section('page_css')
+    <link href="{{ asset('assets/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bs4-summernote/summernote-bs4.css') }}">
+@endsection
+@section('content')
+    <section class="section">
+        <h1>sdjflkdf</h1>
+        <div class="section-header item-align-right">
+            <h1>{{ __('messages.employees.list') }}</h1>
+            <div class="section-header-breadcrumb float-right">
+                <div class="card-header-action mr-3 select2-mobile-margin">
+                </div>
+            </div>
+            @can('create_employees')
+                <div class="d-flex justify-content-between mb-3">
+                    <!-- Status Dropdown -->
+                    <div class="mr-3">
+                        <label for="statusDropdown">Status</label>
+                        <select id="statusDropdown" class="form-control d-inline-block" style="width: 160px;">
+                            <option value="all">All</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                    <!-- Export Button -->
+                    <div class="mr-3">
+                        <button id="exportButton" class="btn btnSecondary text-white " style="background: orange !important;">
+                            Export
+                        </button>
+                    </div>
+                    <!-- Add Employee Button -->
+                    <div class="float-right">
+                        <a href="{{ route('employees.create') }}" class="btn btn-primary form-btn">
+                            {{ __('messages.employees.add_employee') }}
+                        </a>
+                    </div>
+                </div>
+            @endcan
+        </div>
+        <div class="section-body">
+            <div class="card">
+                <div class="card-body">
+                    <div style="width:100%;">
+                        @include('employees.table')
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    @include('employees.templates.templates')
+@endsection
+@section('page_scripts')
+    <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ mix('assets/js/custom/custom-datatable.js') }}"></script>
+    <script src="{{ mix('assets/js/bs4-summernote/summernote-bs4.js') }}"></script>
+    <script src="{{ mix('assets/js/select2.min.js') }}"></script>
+@endsection
+@section('scripts')
+    <script src="{{ mix('assets/js/custom/input-price-format.js') }}"></script>
+
+    <script>
+        'use strict';
+
+
+        let tbl = $('#employeesTable').DataTable({
+            oLanguage: {
+                'sEmptyTable': Lang.get('messages.common.no_data_available_in_table'),
+                'sInfo': Lang.get('messages.common.data_base_entries'),
+                sLengthMenu: Lang.get('messages.common.menu_entry'),
+                sInfoEmpty: Lang.get('messages.common.no_entry'),
+                sInfoFiltered: Lang.get('messages.common.filter_by'),
+                sZeroRecords: Lang.get('messages.common.no_matching'),
+            },
+            processing: true,
+            serverSide: true,
+
+            ajax: {
+                url: route('employees.index'),
+                beforeSend: function() {
+                    startLoader();
+                },
+                data: function(d) {
+                    d.status = $('#statusDropdown').val(); // Pass selected status
+                },
+                complete: function() {
+                    stopLoader();
+                }
+            },
+            order: [
+                [0, 'desc'] // Ordering by the hidden 'created_at' column (index 2) in descending order
+            ],
+            columnDefs: [{
+                targets: 0, // Adjust the index for the hidden 'created_at' column
+                orderable: true,
+                visible: false, // Hide the 'created_at' column
+            }],
+            columns: [{
+                    data: 'updated_at', // Ensure this matches the data key for created_at in your data source
+                    name: 'updated_at'
+                }, {
+                    data: function(row) {
+                        return row.iqama_no;
+                    },
+                    name: 'iqama_no',
+                    width: "10%"
+                }, {
+                    data: function(row) {
+                        let element = document.createElement('textarea');
+                        element.innerHTML = row.name;
+                        return element.value;
+                    },
+                    name: 'name',
+                },
+                {
+                    data: function(row) {
+                        if (row.department && row.department.name) {
+                            return row.department.name;
+                        }
+                        return '';
+                    },
+                    name: 'department.name'
+                },
+                {
+                    data: function(row) {
+                        if (row.designation && row.designation.name) {
+                            return row.designation.name;
+                        }
+                        return '';
+                    },
+                    name: 'designation.name'
+
+                },
+                // {
+                //     data: function(row) {
+                //         if (row.employment_type) {
+                //             return row.employment_type;
+                //         }
+                //         return '';
+
+                //     },
+                //     name: 'employment_type'
+                // },
+                {
+                    data: function(row) {
+                        const statusText = row.status == 1 ? '<span class="text-success">Active</span>' :
+                            '<span class="text-danger">Inactive</span>';
+                        return statusText;
+                    }
+                },
+                {
+                    data: function(row) {
+                        return renderActionButtons(row.id);
+                    },
+                    name: 'id',
+                    width: '200px'
+                }
+
+            ],
+            responsive: true // Enable responsive features
+        });
+
+        $(document).on('click', '.delete-btn', function(event) {
+            let assetCateogryId = $(event.currentTarget).data('id');
+            deleteItem(route('employees.destroy', assetCateogryId), '#employeesTable',
+                "{{ __('messages.employees.name') }}");
+        });
+
+        $('#statusDropdown').change(function() {
+            tbl.ajax.reload(); // Reload DataTable with new status filter
+        });
+
+        // Export button click event
+        $('#exportButton').on('click', function() {
+            const selectedStatus = $('#statusDropdown').val();
+
+            // Build the URL using only the status parameter
+            const exportUrl = `{{ route('employees.export', ['status' => ':status']) }}`;
+            window.location.href = exportUrl.replace(':status', selectedStatus);
+        });
+    </script>
+
+
+    <script>
+        // Define messages for translations
+        var messages = {
+            delete: "{{ __('messages.common.delete') }}",
+            edit: "{{ __('messages.common.edit') }}",
+            view: "{{ __('messages.common.view') }}"
+        };
+
+        // Define permissions
+        var permissions = {
+            updateItem: "{{ auth()->user()->can('update_employees') ? 'true' : 'false' }}",
+            deleteItem: "{{ auth()->user()->can('delete_employees') ? 'true' : 'false' }}",
+            viewItem: "{{ auth()->user()->can('view_employees') ? 'true' : 'false' }}"
+        };
+
+        // Function to render action buttons based on permissions
+        function renderActionButtons(id) {
+            let buttons = '';
+            if (permissions.updateItem === 'true') {
+                let editUrl = `{{ route('employees.edit', ':id') }}`;
+                editUrl = editUrl.replace(':id', id);
+                buttons += `
+                <a title="${messages.edit}" href="${editUrl}" class="btn btn-warning action-btn has-icon edit-btn" style="float:right;margin:2px;">
+                    <i class="fa fa-edit"></i>
+                </a>
+            `;
+            }
+            if (permissions.viewItem === 'true') {
+                let viewUrl = `{{ route('employees.view', ':id') }}`;
+                viewUrl = viewUrl.replace(':id', id);
+                buttons += `
+                <a title="${messages.view}" href="${viewUrl}" class="btn btn-info action-btn has-icon view-btn" style="float:right;margin:2px;">
+                    <i class="fa fa-eye"></i>
+                </a>
+            `;
+            }
+
+            if (permissions.deleteItem === 'true') {
+                buttons += `
+                <a title="${messages.delete}" href="#" class="btn btn-danger action-btn has-icon delete-btn" data-id="${id}" style="float:right;margin:2px;">
+                    <i class="fa fa-trash"></i>
+                </a>
+            `;
+            }
+
+            return buttons;
+        }
+    </script>
+@endsection

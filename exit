@@ -1,0 +1,21 @@
+[90m= [39m{#7563
+    +"[1mid[22m": [35m4766[39m,
+    +"[1mmodel_type[22m": "[32mApp\Models\Expense[39m",
+    +"[1mmodel_id[22m": [35m4897[39m,
+    +"[1mcollection_name[22m": "[32mexpense[39m",
+    +"[1mname[22m": "[32m06.11.2025 (49321)[39m",
+    +"[1mfile_name[22m": "[32m06.11.2025-(49321).pdf[39m",
+    +"[1mmime_type[22m": "[32mapplication/pdf[39m",
+    +"[1mdisk[22m": "[32mpublic[39m",
+    +"[1msize[22m": [35m236398[39m,
+    +"[1mmanipulations[22m": "[32m[][39m",
+    +"[1mcustom_properties[22m": "[32m[][39m",
+    +"[1mresponsive_images[22m": "[32m[][39m",
+    +"[1morder_column[22m": [35m1[39m,
+    +"[1mcreated_at[22m": "[32m2025-11-13 17:05:20[39m",
+    +"[1mupdated_at[22m": "[32m2025-11-13 17:05:20[39m",
+    +"[1mconversions_disk[22m": "[32mpublic[39m",
+    +"[1muuid[22m": "[32m4acba203-0b6c-4a75-83f7-56fa36e74b66[39m",
+    +"[1mgenerated_conversions[22m": "[32m[][39m",
+  }
+

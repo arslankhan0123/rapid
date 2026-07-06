@@ -1,0 +1,74 @@
+@extends('layouts.app')
+@section('title')
+    {{ __('messages.certificate.view') }}
+@endsection
+@section('page_css')
+    <link href="{{ asset('assets/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bs4-summernote/summernote-bs4.css') }}">
+@endsection
+@section('content')
+    <section class="section">
+        <div class="section-header item-align-right">
+            <h1>{{ __('messages.certificate.view') }}</h1>
+            <div class="section-header-breadcrumb float-right">
+                <div class="card-header-action mr-3 select2-mobile-margin">
+                </div>
+            </div>
+            <div class="float-right">
+                <a href="{{ route('certificate.pdf',$data['data']['id']) }}"
+                    class="btn btnWarning form-btn text-white mr-2">PDF</i>
+                </a>
+                <a href="{{ route('certificate.index') }}"
+                    class="btn btn-primary form-btn">{{ __('messages.assets.list') }}</i>
+                </a>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-danger d-none" id="validationErrorsBox"></div>
+                    <div class="row">
+                        <div class="form-group  col-sm-12 col-md-6">
+                            <strong> {{ Form::label('employee', __('messages.certificate.certificate_number')) }}</strong>
+                            <p style="color: #555;">{{ $data['data']['certificate_number'] ?? '' }}</p>
+                        </div>
+                        <div class="form-group  col-sm-12 col-md-6">
+                            <strong> {{ Form::label('employee', __('messages.certificate.type')) }}</strong>
+                            <p style="color: #555;">{{ $data['data']['type']['name'] ?? '' }}</p>
+                        </div>
+                        <div class="form-group  col-sm-12 col-md-6">
+                            <strong>{{ Form::label('date', __('messages.certificate.date')) }}</strong>
+                            <div style="color: #555;">
+                                {{ $data['data']['date'] ? \Carbon\Carbon::parse($data['data']['date'])->format('d-M-Y') : '' }}
+                            </div>
+                        </div>
+                        <div class="form-group  col-sm-12 col-md-6">
+                            <strong> {{ Form::label('employee', __('messages.certificate.employee')) }}</strong>
+                            <p style="color: #555;">{{ $data['data']['employee'] ?? '' }}</p>
+                        </div>
+                        <div class="form-group  col-sm-12 col-md-6">
+                            <strong>{{ Form::label('lab_manager', __('messages.certificate.lab_manager')) }}</strong>
+                            <div style="color: #555;"> {{ $data['data']['lab_manager'] ?? '' }}</div>
+                        </div>
+                        <div class="form-group  col-sm-12 col-md-6">
+                            <strong>{{ Form::label('general_manager', __('messages.certificate.general_manager')) }}</strong>
+                            <div style="color: #555;"> {{ $data['data']['general_manager'] ?? '' }}</div>
+                        </div>
+                        <div class="form-group  col-sm-12 col-md-6">
+                            <strong>{{ Form::label('description', __('messages.certificate.description')) }}</strong>
+                            <div style="color: #555;"> {!! $data['data']['description'] ?? '' !!}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@endsection
+@section('page_scripts')
+    <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ mix('assets/js/custom/custom-datatable.js') }}"></script>
+    <script src="{{ mix('assets/js/bs4-summernote/summernote-bs4.js') }}"></script>
+    <script src="{{ mix('assets/js/select2.min.js') }}"></script>
+@endsection

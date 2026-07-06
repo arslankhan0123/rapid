@@ -1,0 +1,91 @@
+<IfModule mod_rewrite.c>
+
+    # -------------------------
+    # Force UTF-8 encoding
+    # -------------------------
+    AddDefaultCharset UTF-8
+    AddCharset UTF-8 .html .php .css .js .pdf
+    AllowEncodedSlashes On
+
+    # -------------------------
+    # Disable MultiViews & Indexes
+    # -------------------------
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    # -------------------------
+    # Enable Rewrite Engine
+    # -------------------------
+    RewriteEngine On
+
+    # Handle Authorization Header
+    #RewriteCond %{HTTP:Authorization} .
+    #RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # -------------------------
+    # Fix spaces (%20) and UTF-8 in filenames
+    # -------------------------
+    RewriteCond %{REQUEST_URI} "%20"
+    RewriteRule .* - [B]
+
+    # -------------------------
+    # Redirect Trailing Slashes If Not A Folder
+    # -------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # -------------------------
+    # Redirect to public folder if not already there
+    # -------------------------
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L,QSA]
+
+    # -------------------------
+    # Handle Front Controller (Laravel routing)
+    # -------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+</IfModule>
+
+# -------------------------
+# PHP Configuration for cPanel
+# -------------------------
+<IfModule php8_module>
+    php_flag display_errors Off
+    php_value max_execution_time 150
+    php_value max_input_time 600
+    php_value max_input_vars 3000
+    php_value memory_limit 512M
+    php_value post_max_size 128M
+    php_value session.gc_maxlifetime 1440
+    php_value session.save_path "/var/cpanel/php/sessions/ea-php82"
+    php_value upload_max_filesize 20M
+    php_flag zlib.output_compression Off
+</IfModule>
+
+<IfModule lsapi_module>
+    php_flag display_errors Off
+    php_value max_execution_time 150
+    php_value max_input_time 600
+    php_value max_input_vars 3000
+    php_value memory_limit 512M
+    php_value post_max_size 128M
+    php_value session.gc_maxlifetime 1440
+    php_value session.save_path "/var/cpanel/php/sessions/ea-php82"
+    php_value upload_max_filesize 20M
+    php_flag zlib.output_compression Off
+</IfModule>
+
+# -------------------------
+# PHP Handler
+# -------------------------
+<IfModule mime_module>
+    AddHandler application/x-httpd-ea-php82___lsphp .php .php8 .phtml
+</IfModule>
