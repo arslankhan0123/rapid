@@ -251,6 +251,104 @@ Route::post(
 Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admin_timeout'])->prefix('admin')->group(function () {
     // Dashboard route
 
+    Route::get('/clear-raw-data', function () {
+        // Array of configuration/system tables to preserve
+        $excludedTables = [
+            'users',
+            'settings',
+            'migrations',
+            'failed_jobs',
+            'password_resets',
+            'permissions',
+            'roles',
+            'model_has_permissions',
+            'model_has_roles',
+            'role_has_permissions',
+            'countries',
+            'currencies',
+            'languages',
+            'states',
+            'cities',
+            'areas',
+            'branches',
+            'branch_docs',
+            'contract_types',
+            'certificate_types',
+            'bonus_types',
+            'allowance_types',
+            'deduction_types',
+            'expense_categories',
+            'expense_sub_categories',
+            'goal_types',
+            'payment_modes',
+            'product_brands',
+            'product_colors',
+            'product_sizes',
+            'product_units',
+            'project_calculation_partners',
+            'service_categories',
+            'tax_rates',
+            'document_next_number',
+            'users_branches',
+            'user_departments',
+            'statuses',
+            'ticket_priorities',
+            'ticket_statuses',
+            'task_status',
+            'lead_sources',
+            'lead_statuses',
+            'item_groups',
+            'customer_groups',
+            'supplier_groups',
+            'contact_email_notifications',
+            'email_templates',
+            'email_notifications',
+            'predefined_replies'
+        ];
+
+        $tables = Illuminate\Support\Facades\DB::select('SHOW TABLES');
+        
+        $truncated = [];
+        $skipped = [];
+
+        Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        foreach ($tables as $table) {
+            $tableArray = (array)$table;
+            $tableName = array_values($tableArray)[0];
+
+            if (in_array($tableName, $excludedTables)) {
+                $skipped[] = $tableName;
+            } else {
+                Illuminate\Support\Facades\DB::table($tableName)->truncate();
+                $truncated[] = $tableName;
+            }
+        }
+
+        Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $html = '<html><head><title>Database Cleanup Result</title><style>body { font-family: Arial, sans-serif; margin: 20px; } .container { display: flex; } .box { flex: 1; padding: 20px; margin: 10px; border: 1px solid #ddd; border-radius: 5px; } h3 { color: #333; } ul { list-style-type: none; padding: 0; } li { padding: 5px; border-bottom: 1px solid #eee; } .truncated { color: #d9534f; } .skipped { color: #5cb85c; }</style></head><body>';
+        $html .= '<h2>Database Cleanup Result</h2>';
+        $html .= '<p>Raw data has been deleted, but system and configuration tables were preserved.</p>';
+        $html .= '<div class="container">';
+        
+        $html .= '<div class="box"><h3 class="truncated">Deleted Tables Data (' . count($truncated) . ')</h3><ul>';
+        foreach ($truncated as $t) {
+            $html .= "<li>{$t}</li>";
+        }
+        $html .= '</ul></div>';
+        
+        $html .= '<div class="box"><h3 class="skipped">Skipped Tables (' . count($skipped) . ')</h3><ul>';
+        foreach ($skipped as $s) {
+            $html .= "<li>{$s}</li>";
+        }
+        $html .= '</ul></div>';
+        
+        $html .= '</div></body></html>';
+
+        return $html;
+    });
+
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard/employees', [DashboardController::class, 'getExpireIdentications'])->name('dashboard.employees');
     Route::get('dashboard/expiry/', [DashboardController::class, 'expireList'])->name('dashboard.expire.list');
