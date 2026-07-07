@@ -31,10 +31,10 @@
             </div> --}}
             <div class="col-md-7 bg-white" style=" border-radius:8px;">
                 <div class="card-body bg-white">
-                    <div class="row">
+                    <div class="row mt-5 mb-5">
 
                         @include('flash::message')
-                        <img src="{{ asset('img/company/company_logo.png') }}" alt="logo" width="196"
+                        <img src="{{ asset('RAPID.png') }}" alt="logo" width="300"
                             style="box-shadow:none;margin:auto;" style="margin: auto" class="shadow-light">
                         {{-- <h4>{{ __('messages.login.login') }}</h4> --}}
 
