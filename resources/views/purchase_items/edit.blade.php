@@ -32,9 +32,9 @@
                     <div class="row">
                         <div class="form-group col-sm-12 col-md-6">
                             {{ Form::label('title', __('messages.pos.item_code')) }}<span class="required">*</span>
-                            {{ Form::text('code', $item->code ?? null, ['class' => 'form-control', 'required', 'autocomplete' => 'off', $itemCodeStatus == 1 ? 'readonly' : null]) }}
+                            {{ Form::text('code', $item->code ?? null, ['class' => 'form-control', 'required', 'autocomplete' => 'off', 'readonly' => 'readonly']) }}
                         </div>
-                        <div class="form-group col-sm-12 col-md-6">
+                        {{-- <div class="form-group col-sm-12 col-md-6">
                             {{ Form::label('title', __('messages.common.barcode')) }}<span class="required">*</span>
                             {{ Form::text('barcode', $item->barcode ?? null, ['class' => 'form-control', 'required', 'autocomplete' => 'off', 'maxlength' => '15']) }}
                         </div>
@@ -42,7 +42,7 @@
                             {{ Form::label('title', __('messages.purchase-items.short_name')) }}<span
                                 class="required">*</span>
                             {{ Form::text('name', $item->name, ['class' => 'form-control', 'required', 'id' => 'categoryTitle_edit', 'autocomplete' => 'off', 'maxLength' => 20]) }}
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6">
                             {{ Form::label('title', __('messages.purchase-items.full_name')) }}<span
                                 class="required">*</span>
@@ -114,6 +114,27 @@
                             {{ Form::label('description', __('messages.purchase-items.image')) }} </br>
                             <input type="file" name="image" id="image">
                             <img src="{{ asset($item->image) }}" alt="Item Image" width="100">
+                        </div>
+                        
+                        <div class="form-group col-sm-12 col-md-6">
+                            {{ Form::label('specifications', 'Specifications') }}
+                            {{ Form::text('specifications', $item->specifications ?? null, ['class' => 'form-control', 'autocomplete' => 'off', 'maxlength' => '255']) }}
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6">
+                            {{ Form::label('processor', 'Processor') }}
+                            {{ Form::text('processor', $item->processor ?? null, ['class' => 'form-control', 'autocomplete' => 'off', 'maxlength' => '255']) }}
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6">
+                            {{ Form::label('ram', 'RAM') }}
+                            {{ Form::text('ram', $item->ram ?? null, ['class' => 'form-control', 'autocomplete' => 'off', 'maxlength' => '255']) }}
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6">
+                            {{ Form::label('storage', 'Storage') }}
+                            {{ Form::text('storage', $item->storage ?? null, ['class' => 'form-control', 'autocomplete' => 'off', 'maxlength' => '255']) }}
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6">
+                            {{ Form::label('casing', 'Casing') }}
+                            {{ Form::text('casing', $item->casing ?? null, ['class' => 'form-control', 'autocomplete' => 'off', 'maxlength' => '255']) }}
                         </div>
                         <div class="form-group col-sm-12 mb-0">
                             {{ Form::label('description', __('messages.common.description')) }}

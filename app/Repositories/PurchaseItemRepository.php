@@ -49,6 +49,11 @@ class PurchaseItemRepository extends BaseRepository
         'qty_in',
         'qty_out',
         'qty_current',
+        'specifications',
+        'processor',
+        'ram',
+        'storage',
+        'casing',
     ];
 
     /**

@@ -179,6 +179,20 @@ Route::get('/', function () {
 
 Route::get('download/invoice/{number}', [InvoiceController::class, 'downloadPDF']);
 
+Route::get('/add-specs-columns', function () {
+    if (!Illuminate\Support\Facades\Schema::hasColumn('purchase_items', 'specifications')) {
+        Illuminate\Support\Facades\Schema::table('purchase_items', function ($table) {
+            $table->string('specifications')->nullable();
+            $table->string('processor')->nullable();
+            $table->string('ram')->nullable();
+            $table->string('storage')->nullable();
+            $table->string('casing')->nullable();
+        });
+        return 'Columns added successfully!';
+    }
+    return 'Columns already exist.';
+});
+
 Auth::routes(['verify' => true]);
 
 // Route::get('/debug-salary-hours', [SalaryGenerateController::class, 'quickDebugHours']);

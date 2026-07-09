@@ -124,7 +124,8 @@ class PurchaseItemController extends AppBaseController
         $categories = $this->purchaseItemRepository->getCategories();
         $subcategories = $this->purchaseItemRepository->getSubCategories();
         $units = $this->purchaseItemRepository->getUnits();
-        $nextNumber = DocumentNextNumber::getNextNumber('item_code');
+        $lastCode = \App\Models\PurchaseItem::max('code');
+        $nextNumber = ($lastCode && is_numeric($lastCode) && $lastCode >= 100) ? (int)$lastCode + 1 : 100;
         $brands = $this->purchaseItemRepository->getBrands();
         $sizes = $this->purchaseItemRepository->getSizes();
         $colors = $this->purchaseItemRepository->getColors();
@@ -140,15 +141,24 @@ class PurchaseItemController extends AppBaseController
     {
         $input = $request->all();
 
-
-
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName(); // Unique file name
             $image->move(public_path('img/items/'), $imageName); // Move file to public/img/items/
             $input['image'] = 'img/items/' . $imageName; // Store relative path
         }
-        DocumentNextNumber::updateNumber('item_code');
+        
+        $lastCode = \App\Models\PurchaseItem::max('code');
+        $newCode = ($lastCode && is_numeric($lastCode) && $lastCode >= 100) ? (int)$lastCode + 1 : 100;
+        $input['code'] = $newCode;
+
+        $document = \App\Models\DocumentNextNumber::firstOrCreate(
+            ['type' => 'item_code'],
+            ['number' => $newCode]
+        );
+        $document->number = $newCode;
+        $document->save();
+
         try {
             $assetCategory = $this->purchaseItemRepository->create($input);
             return response()->json(['success' => true, 'message' => 'Item created successfully']);

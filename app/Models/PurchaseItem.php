@@ -11,14 +11,18 @@ class PurchaseItem extends Model
 
     protected $table = 'purchase_items';
     public static $rules = [
-        'name' => 'required',
+        'full_name' => 'required',
         'purchase_group_id' =>  'nullable|exists:purchase_groups,id',
         'purchase_category_id' =>  'nullable|exists:purchase_categories,id',
         'purchase_sub_category_id' =>  'nullable|exists:purchase_sub_categories,id',
         'unit_id' =>  'nullable|exists:product_units,id',
         'price' => 'nullable|numeric',
         'code' => "required|unique:purchase_items,code",
-        'barcode' => "nullable|unique:purchase_items,barcode",
+        'specifications' => 'nullable|string',
+        'processor' => 'nullable|string|max:255',
+        'ram' => 'nullable|string|max:255',
+        'storage' => 'nullable|string|max:255',
+        'casing' => 'nullable|string|max:255',
     ];
     protected $fillable = [
         'name',
@@ -40,6 +44,11 @@ class PurchaseItem extends Model
         'qty_in',
         'qty_out',
         'qty_current',
+        'specifications',
+        'processor',
+        'ram',
+        'storage',
+        'casing',
     ];
     /**
      * @var array

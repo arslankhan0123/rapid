@@ -85,9 +85,7 @@
                 },
                 {
                     data: function(row) {
-                        let element = document.createElement('textarea');
-                        element.innerHTML = row.code ?? '';
-                        return element.value;
+                        return row.code ?? '';
                     },
                     name: 'code',
                     width: '7%',
@@ -95,53 +93,65 @@
                 },
                 {
                     data: function(row) {
-                        let element = document.createElement('textarea');
-                        element.innerHTML = row.barcode ?? '';
-                        return element.value;
+                        return row.full_name ?? row.name ?? '';
                     },
-                    name: 'barcode',
-                    width: '8%',
-                    className: 'text-center'
-                },
-                {
-                    data: function(row) {
-                        let element = document.createElement('textarea');
-                        element.innerHTML = row.name;
-                        return element.value;
-                    },
-                    name: 'name',
+                    name: 'full_name',
                     width: '15%',
                     className: 'text-center'
                 },
                 {
                     data: function(row) {
-                        let element = document.createElement('textarea');
-                        element.innerHTML = row.category?.name ?? '';
-                        return element.value;
-                    },
-                    name: 'category.name',
-                    width: '8%',
-                    className: 'text-center'
-                },
-                {
-                    data: function(row) {
-                        let element = document.createElement('textarea');
-                        element.innerHTML = row.description;
-                        return element.value;
-                    },
-                    name: 'description',
-                    width: '10%',
-                    className: 'text-center'
-                },
-                {
-                    data: function(row) {
-                        let price = row.price !== null && row.price !== undefined ? row.price.toFixed(2) :
+                        let price = row.price !== null && row.price !== undefined ? parseFloat(row.price).toFixed(2) :
                             '0.00';
                         return price;
                     },
                     className: 'text-center',
                     name: 'price',
                     width: '7%'
+                },
+                {
+                    data: function(row) {
+                        return row.group?.name ?? '';
+                    },
+                    name: 'group.name',
+                    width: '10%',
+                    className: 'text-center'
+                },
+                {
+                    data: function(row) {
+                        return row.category?.name ?? '';
+                    },
+                    name: 'category.name',
+                    width: '10%',
+                    className: 'text-center'
+                },
+                {
+                    data: function(row) {
+                        if (row.created_at) {
+                            let date = new Date(row.created_at);
+                            if (isNaN(date.getTime())) {
+                                // Fallback parsing if date is invalid, though JS parses ISO 8601 fine
+                                date = new Date(row.created_at.replace(/-/g, "/"));
+                            }
+                            let day = String(date.getDate()).padStart(2, '0');
+                            let month = String(date.getMonth() + 1).padStart(2, '0');
+                            let year = date.getFullYear();
+                            
+                            let hours = date.getHours();
+                            let minutes = String(date.getMinutes()).padStart(2, '0');
+                            let seconds = String(date.getSeconds()).padStart(2, '0');
+                            let ampm = hours >= 12 ? 'pm' : 'am';
+                            hours = hours % 12;
+                            hours = hours ? hours : 12; // the hour '0' should be '12'
+                            let strHours = String(hours).padStart(2, '0');
+                            
+                            return day + '-' + month + '-' + year + ' ' + strHours + ':' + minutes + ':' + seconds + ampm;
+                        }
+                        return '';
+                    },
+                    name: 'created_at',
+                    width: '15%',
+                    className: 'text-center'
                 },
                 {
                     data: function(row) {

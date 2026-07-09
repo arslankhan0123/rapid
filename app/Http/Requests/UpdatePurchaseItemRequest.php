@@ -26,10 +26,10 @@ class UpdatePurchaseItemRequest extends FormRequest
     {
         $category = $this->route('item');
         return [
-            'barcode' => [
-                'required',
-                Rule::unique('purchase_items', 'barcode')->ignore($category),
-            ],
+            // 'barcode' => [
+            //     'required',
+            //     Rule::unique('purchase_items', 'barcode')->ignore($category),
+            // ],
             'code' => [
                 'required',
                 Rule::unique('purchase_items', 'code')->ignore($category),
