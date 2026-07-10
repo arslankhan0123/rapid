@@ -129,7 +129,7 @@
                     },
                     name: 'full_name',
                     width: '15%',
-                    className: 'text-center'
+                    className: 'text-left'
                 },
                 {
                     data: function(row) {
@@ -147,7 +147,7 @@
                     },
                     name: 'group.name',
                     width: '10%',
-                    className: 'text-center'
+                    className: 'text-left'
                 },
                 {
                     data: function(row) {
@@ -155,7 +155,7 @@
                     },
                     name: 'category.name',
                     width: '10%',
-                    className: 'text-center'
+                    className: 'text-left'
                 },
                 {
                     data: function(row) {
