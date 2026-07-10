@@ -86,13 +86,34 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <strong> {{ Form::label('title', __('messages.purchase-items.image')) }}</strong><br>
-                            <img src="{{ asset($category->image) }}" alt="Item Image" width="100">
+                            @if($category->image)
+                                <a href="javascript:void(0)" class="view-image-btn" data-image-url="{{ asset($category->image) }}" data-title="{{ $category->full_name ?? $category->name ?? 'Image' }}">
+                                    <img src="{{ asset($category->image) }}" alt="Item Image" width="100" style="object-fit:cover; border-radius:4px;">
+                                </a>
+                            @endif
                         </div>
 
                         <div class="form-group col-sm-12 mb-0">
                             <strong>{{ Form::label('description', __('messages.common.description')) }}</strong>
                             <div style="color: #555;"> {!! $category->description !!}</div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Image Preview Modal -->
+        <div class="modal fade" id="imagePreviewModal" tabindex="-1" role="dialog" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imagePreviewModalLabel">Image Preview</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="" id="previewModalImage" class="img-fluid" alt="Preview Image" style="max-height: 400px; object-fit: contain;">
                     </div>
                 </div>
             </div>
@@ -104,4 +125,15 @@
     <script src="{{ mix('assets/js/custom/custom-datatable.js') }}"></script>
     <script src="{{ mix('assets/js/bs4-summernote/summernote-bs4.js') }}"></script>
     <script src="{{ mix('assets/js/select2.min.js') }}"></script>
+@endsection
+@section('scripts')
+    <script>
+        $(document).on('click', '.view-image-btn', function() {
+            let imageUrl = $(this).data('image-url');
+            let title = $(this).data('title');
+            $('#imagePreviewModalLabel').text(title);
+            $('#previewModalImage').attr('src', imageUrl);
+            $('#imagePreviewModal').appendTo("body").modal('show');
+        });
+    </script>
 @endsection

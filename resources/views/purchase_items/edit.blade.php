@@ -113,7 +113,12 @@
                         <div class="form-group col-sm-12 col-md-6 mb-0">
                             {{ Form::label('description', __('messages.purchase-items.image')) }} </br>
                             <input type="file" name="image" id="image">
-                            <img src="{{ asset($item->image) }}" alt="Item Image" width="100">
+                            @if($item->image)
+                                <br>
+                                <a href="javascript:void(0)" class="view-image-btn" data-image-url="{{ asset($item->image) }}" data-title="{{ $item->full_name ?? $item->name ?? 'Image' }}">
+                                    <img src="{{ asset($item->image) }}" alt="Item Image" width="100" style="object-fit:cover; border-radius:4px; margin-top: 10px;">
+                                </a>
+                            @endif
                         </div>
                         
                         <div class="form-group col-sm-12 col-md-6">
@@ -148,6 +153,23 @@
 
                     {{ Form::close() }}
 
+                </div>
+            </div>
+        </div>
+        
+        <!-- Image Preview Modal -->
+        <div class="modal fade" id="imagePreviewModal" tabindex="-1" role="dialog" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imagePreviewModalLabel">Image Preview</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="" id="previewModalImage" class="img-fluid" alt="Preview Image" style="max-height: 400px; object-fit: contain;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,6 +279,14 @@
                 // Refresh the Select2 dropdown for subcategories
                 $('#subcategory_select').select2();
             });
+        });
+
+        $(document).on('click', '.view-image-btn', function() {
+            let imageUrl = $(this).data('image-url');
+            let title = $(this).data('title');
+            $('#imagePreviewModalLabel').text(title);
+            $('#previewModalImage').attr('src', imageUrl);
+            $('#imagePreviewModal').appendTo("body").modal('show');
         });
     </script>
 @endsection
