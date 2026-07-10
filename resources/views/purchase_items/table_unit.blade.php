@@ -4,6 +4,7 @@
     <thead>
         <tr>
             <th scope="col" style="display: none;"></th> <!-- Hidden column for code sorting -->
+            <th scope="col">Image</th>
             <th scope="col">{{ __('messages.common.code') }}</th>
             <th scope="col">{{ __('messages.common.name') }}</th>
             <th scope="col">Price</th>

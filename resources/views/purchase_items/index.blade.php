@@ -39,6 +39,23 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Image Preview Modal -->
+        <div class="modal fade" id="imagePreviewModal" tabindex="-1" role="dialog" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imagePreviewModalLabel">Image Preview</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="" id="previewModalImage" class="img-fluid" alt="Preview Image" style="max-height: 400px; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection
 @section('page_scripts')
@@ -82,6 +99,21 @@
                     data: 'code',
                     name: 'code',
                     visible: false
+                },
+                {
+                    data: function(row) {
+                        if (row.image) {
+                            let imageUrl = row.image.startsWith('/') ? row.image : '/' + row.image;
+                            let title = row.full_name ?? row.name ?? 'Image';
+                            return `<a href="javascript:void(0)" class="view-image-btn" data-image-url="${imageUrl}" data-title="${title}">
+                                        <img src="${imageUrl}" width="50" height="50" style="object-fit:cover; border-radius:4px;" alt="Image" />
+                                    </a>`;
+                        }
+                        return '';
+                    },
+                    name: 'image',
+                    width: '7%',
+                    className: 'text-center'
                 },
                 {
                     data: function(row) {
@@ -176,6 +208,16 @@
             let assetCateogryId = $(event.currentTarget).data('id');
             deleteItem(route('purchase-items.destroy', assetCateogryId), '#assetCategoryTable',
                 "{{ __('messages.purchase-items.short_name') }}");
+        });
+
+        $(document).on('click', '.view-image-btn', function() {
+            let imageUrl = $(this).data('image-url');
+            let title = $(this).data('title');
+            $('#imagePreviewModalLabel').text(title);
+            $('#previewModalImage').attr('src', imageUrl);
+            
+            // Append modal to body to avoid z-index/backdrop issues
+            $('#imagePreviewModal').appendTo("body").modal('show');
         });
     </script>
 
