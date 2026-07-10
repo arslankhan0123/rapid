@@ -56,6 +56,25 @@
                 </div>
             </div>
         </div>
+        <!-- Share Modal -->
+        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareModalLabel">Share Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>Share this item details:</p>
+                        <a href="#" id="whatsappShareBtn" target="_blank" class="btn btn-success" style="font-size: 18px; padding: 10px 20px; margin: 5px;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection
 @section('page_scripts')
@@ -187,10 +206,10 @@
                 },
                 {
                     data: function(row) {
-                        return renderActionButtons(row.id);
+                        return renderActionButtons(row);
                     },
                     name: 'id',
-                    width: '7%',
+                    width: '10%',
                     className: 'text-center'
                 }
             ],
@@ -219,6 +238,21 @@
             // Append modal to body to avoid z-index/backdrop issues
             $('#imagePreviewModal').appendTo("body").modal('show');
         });
+
+        $(document).on('click', '.share-btn', function() {
+            let name = $(this).data('name');
+            let price = $(this).data('price');
+            let imagePath = $(this).data('image');
+            
+            let fullImageLink = imagePath ? window.location.origin + imagePath : 'No Image';
+            let text = `Check out this item!\nName: ${name}\nPrice: ${price}\nImage Link: ${fullImageLink}`;
+            
+            let encodedText = encodeURIComponent(text);
+            
+            $('#whatsappShareBtn').attr('href', 'https://api.whatsapp.com/send?text=' + encodedText);
+            
+            $('#shareModal').appendTo("body").modal('show');
+        });
     </script>
 
     <script>
@@ -234,9 +268,32 @@
             deleteItem: "{{ auth()->user()->can('delete_purchase_items') ? 'true' : 'false' }}",
             viewItem: "{{ auth()->user()->can('view_purchase_items') ? 'true' : 'false' }}"
         };
+        function escapeHtml(unsafe) {
+            if(!unsafe) return '';
+            return unsafe.toString()
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
         // Function to render action buttons based on permissions
-        function renderActionButtons(id) {
+        function renderActionButtons(row) {
+            let id = row.id;
             let buttons = '';
+            
+            let name = row.full_name ?? row.name ?? '';
+            let price = row.price !== null && row.price !== undefined ? parseFloat(row.price).toFixed(2) : '0.00';
+            let imageUrl = row.image ? (row.image.startsWith('/') ? row.image : '/' + row.image) : '';
+            
+            buttons += `
+                <a title="Share" href="javascript:void(0)" class="btn btn-success action-btn has-icon share-btn" 
+                   data-name="${escapeHtml(name)}" data-price="${price}" data-image="${imageUrl}"
+                   style="float:right;margin:2px;">
+                    <i class="fa fa-share-alt"></i>
+                </a>
+            `;
             if (permissions.updateItem === 'true') {
                 let editUrl = `{{ route('purchase-items.edit', ':id') }}`;
                 editUrl = editUrl.replace(':id', id);
