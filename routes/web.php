@@ -111,6 +111,7 @@ use App\Http\Controllers\SalaryGenerateController;
 use App\Http\Controllers\EmployeeSalaryController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\SalaryAdvanceController;
@@ -2021,6 +2022,17 @@ Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admi
         Route::get('states/{state}/edit', [StateController::class, 'edit'])->middleware('permission:update_states')->name('states.edit');
         Route::put('states/{state}', [StateController::class, 'update'])->middleware('permission:update_states')->name('states.update');
         Route::delete('states/{state}', [StateController::class, 'destroy'])->middleware('permission:delete_states')->name('states.destroy');
+    });
+
+    // locations routes
+    Route::group(['middleware' => ['permission:view_locations|create_locations|update_locations|delete_locations']], function () {
+        Route::get('locations', [LocationController::class, 'index'])->name('locations.index');
+        Route::get('locations/create', [LocationController::class, 'create'])->middleware('permission:create_locations')->name('locations.create');
+        Route::post('locations', [LocationController::class, 'store'])->middleware('permission:create_locations')->name('locations.store');
+        Route::get('locations/{location}/view', [LocationController::class, 'view'])->middleware('permission:view_locations')->name('locations.view');
+        Route::get('locations/{location}/edit', [LocationController::class, 'edit'])->middleware('permission:update_locations')->name('locations.edit');
+        Route::put('locations/{location}', [LocationController::class, 'update'])->middleware('permission:update_locations')->name('locations.update');
+        Route::delete('locations/{location}', [LocationController::class, 'destroy'])->middleware('permission:delete_locations')->name('locations.destroy');
     });
 
     // cities routes

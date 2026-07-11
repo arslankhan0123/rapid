@@ -1246,6 +1246,14 @@
                 </a>
             </li>
         @endcanany
+        @canany(['view_locations', 'create_locations', 'update_locations', 'delete_locations'])
+            <li class="side-menus {{ Request::is('admin/locations*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('locations.index') }}">
+                    <i class="fas fa-lg fa-map-marker-alt"></i>
+                    <span class="menu-text-wrap">{{ __('messages.locations.locations') }}</span>
+                </a>
+            </li>
+        @endcanany
         @can('manage_settings')
             <li class="nav-item side-menus {{ Request::is('admin/settings*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('settings.show', ['group' => 'company_information']) }}">

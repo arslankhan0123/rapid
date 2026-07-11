@@ -1321,6 +1321,19 @@ return [
         'city' => "City",
         'select_city' => "Select City"
     ],
+    'locations' => [
+        'name' => 'Location',
+        'locations' => "Locations",
+        "add" => "Add Location",
+        "saved" => "Location Saved Successfully",
+        "delete" => "Location deleted Successfully",
+        "edit" => "Edit Location ",
+        "description" => "Description",
+        "list" => "List",
+        'view' => "View Location",
+        'country' => "Country",
+        'select_country' => "Select Country",
+    ],
     'areas' => [
         'name' => 'Area',
         'areas' => "Areas",
