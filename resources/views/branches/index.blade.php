@@ -101,14 +101,8 @@
             ajax: {
                 url: route('branches.index'),
                 dataSrc: function(json) {
-                    // Check the number of rows in the response
-                    if (json.data.length >= 6) {
-                        // Hide the button if there are more than 6 rows
-                        $('#btnAdd').hide();
-                    } else {
-                        // Show the button if there are 6 or fewer rows
-                        $('#btnAdd').show();
-                    }
+                    // Always show the button
+                    $('#btnAdd').show();
 
                     // Return the data to populate the DataTable
                     return json.data;
