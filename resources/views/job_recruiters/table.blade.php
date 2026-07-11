@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th scope="col">{{ __('messages.job_recruiters.name') }}</th>
-
+            <th scope="col">{{ __('messages.job_recruiters.description') }}</th>
             <th scope="col">{{ __('messages.common.action') }}</th>
         </tr>
     </thead>

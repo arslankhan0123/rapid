@@ -32,6 +32,10 @@
                                         class="required">*</span>
                                     {{ Form::text('recruiter_name', null, ['class' => 'form-control', 'required', 'id' => 'designation_name', 'autocomplete' => 'off']) }}
                                 </div>
+                                <div class="form-group col-sm-12 mb-0">
+                                    {{ Form::label('description', __('messages.job_recruiters.description') . ':') }}
+                                    {{ Form::textarea('description', null, ['class' => 'form-control summernote-simple', 'id' => 'createDescription']) }}
+                                </div>
                             </div>
                             <div class="text-right mr-1">
                                 {{ Form::button(__('messages.common.submit'), ['type' => 'submit', 'class' => 'btn btn-primary', 'id' => 'btnSave', 'data-loading-text' => "<span class='spinner-border spinner-border-sm'></span> Processing..."]) }}
@@ -59,6 +63,18 @@
             event.preventDefault();
             processingBtn('#addNewFormDepartmentNew', '#btnSave', 'loading');
 
+            let description = $('<div />').
+            html($('#createDescription').summernote('code'));
+            let empty = description.text().trim().replace(/ \r\n\t/g, '') === '';
+
+            if ($('#createDescription').summernote('isEmpty')) {
+                $('#createDescription').val('');
+            } else if (empty) {
+                displayErrorMessage(
+                    'Description field is not contain only white space');
+                processingBtn('#addNewFormDepartmentNew', '#btnSave', 'reset');
+                return false;
+            }
             $.ajax({
                 url: departmentNewCreateUrl,
                 type: 'POST',

@@ -13,10 +13,12 @@ class JobRecruiter extends Model
 
     public $fillable = [
         'recruiter_name',
+        'description',
     ];
 
     protected $casts = [
         'id' => 'integer',
         'recruiter_name' => 'string',
+        'description' => 'string',
     ];
 }

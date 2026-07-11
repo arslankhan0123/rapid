@@ -24,9 +24,13 @@
                 <div class="card-body">
                     <div class="alert alert-danger d-none" id="validationErrorsBox"></div>
                     <div class="row">
-                        <div class="form-group col-sm-12 col-md-6">
-                            {{ Form::label('title', __('messages.job_recruiters.name')) }}
-                            <p>{{ $jobRecruiter->recruiter_name }}</p>
+                        <div class="form-group col-sm-12 mb-0 col-md-6">
+                            {{ Form::label('name', __('messages.job_recruiters.name') . ':') }}
+                            <p id="designation_name">{{ $jobRecruiter->recruiter_name }}</p>
+                        </div>
+                        <div class="form-group col-sm-12 mb-0 col-md-6">
+                            {{ Form::label('description', __('messages.job_recruiters.description') . ':') }}
+                            {!! $jobRecruiter->description !!}
                         </div>
 
 

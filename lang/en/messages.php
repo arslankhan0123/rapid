@@ -1354,6 +1354,7 @@ return [
         'delete' => 'Delete Job Recruiter',
         'saved' => 'Job Recruiter Saved Successfully.',
         'list' => 'Job Recruiters List',
+        'description' => 'Description',
     ],
 
 

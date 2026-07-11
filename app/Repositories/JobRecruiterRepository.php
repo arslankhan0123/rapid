@@ -11,6 +11,7 @@ class JobRecruiterRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'recruiter_name',
+        'description',
     ];
 
     /**

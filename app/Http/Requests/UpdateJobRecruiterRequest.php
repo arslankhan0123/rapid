@@ -25,6 +25,7 @@ class UpdateJobRecruiterRequest extends FormRequest
     {
         return [
             'recruiter_name' => 'required|string|max:150|unique:job_recruiters,recruiter_name,' . $this->id,
+            'description' => 'nullable|string',
         ];
     }
 }

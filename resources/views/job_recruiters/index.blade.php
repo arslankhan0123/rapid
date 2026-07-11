@@ -49,6 +49,18 @@
             processingBtn('#addNewForm', '#btnSave', 'loading');
 
 
+            let description = $('<div />').
+            html($('#createDescription').summernote('code'));
+            let empty = description.text().trim().replace(/ \r\n\t/g, '') === '';
+
+            if ($('#createDescription').summernote('isEmpty')) {
+                $('#createDescription').val('');
+            } else if (empty) {
+                displayErrorMessage(
+                    'Description field is not contain only white space');
+                processingBtn('#addNewForm', '#btnSave', 'reset');
+                return false;
+            }
             $.ajax({
                 url: designationCreateUrl,
                 type: 'POST',
@@ -95,13 +107,21 @@
             ],
             pageLength: 100, // Default page length
             columns: [{
-                    data: function(row) {
-                        let element = document.createElement('textarea');
-                        element.innerHTML = row.recruiter_name;
-                        return element.value;
-                    },
+                    data: 'recruiter_name',
                     name: 'recruiter_name',
                     width: '30%'
+                },
+                {
+                    data: function(row) {
+                        if (row.description == null) {
+                            return '';
+                        }
+                        let element = document.createElement('textarea');
+                        element.innerHTML = row.description;
+                        return element.value;
+                    },
+                    name: 'description',
+                    width: '50%'
                 },
 
 
