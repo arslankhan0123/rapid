@@ -381,6 +381,7 @@ class CustomerRepository extends BaseRepository
             'lead_convert_date' => Carbon::now()->format('Y-m-d'),
         ]);
         $customer = Customer::create($input);
+        $input['real_password'] = $input['password'];
         $input['password'] = Hash::make($input['password']);
 
         if (isset($input['groups']) && !empty(array_filter($input['groups']))) {
@@ -397,6 +398,7 @@ class CustomerRepository extends BaseRepository
             'first_name' => $input['company_name'],
             'email' => $input['email'],
             'password' => $input['password'],
+            'real_password' => $input['real_password'],
         ]);
 
         $roles = Role::whereName('client')->first()->id;

@@ -83,6 +83,7 @@ class MemberRepository extends BaseRepository
     {
         try {
             DB::beginTransaction();
+            $input['real_password'] = $input['password'];
             $input['password'] = Hash::make($input['password']);
             //            $input['phone'] = preparePhoneNumber($input, 'phone');
             $input['phone'] = removeSpaceFromPhoneNumber($input['phone']);
@@ -129,6 +130,14 @@ class MemberRepository extends BaseRepository
     {
         //        $input['phone'] = preparePhoneNumber($input, 'phone');
         $input['phone'] = removeSpaceFromPhoneNumber($input['phone']);
+
+        if (!empty($input['password'])) {
+            $input['real_password'] = $input['password'];
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            unset($input['password']);
+            unset($input['real_password']);
+        }
 
         /** @var User $member */
         $member = User::find($userId);

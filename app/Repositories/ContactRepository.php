@@ -55,6 +55,7 @@ class ContactRepository extends BaseRepository
         try {
             DB::beginTransaction();
 
+            $input['real_password'] = $input['password'];
             $input['password'] = Hash::make($input['password']);
             $input['phone'] = removeSpaceFromPhoneNumber($input['phone']);
             $user = User::create(Arr::only($input, (new User())->getFillable()));
@@ -121,6 +122,15 @@ class ContactRepository extends BaseRepository
             $user = User::find($contact->user->id);
 //            $input['phone'] = preparePhoneNumber($input, 'phone');
             $input['phone'] = removeSpaceFromPhoneNumber($input['phone']);
+
+            if (!empty($input['password'])) {
+                $input['real_password'] = $input['password'];
+                $input['password'] = Hash::make($input['password']);
+            } else {
+                unset($input['password']);
+                unset($input['real_password']);
+            }
+
             $contact->user->update($input);
 
             $roles = Role::whereName('client')->first()->id;

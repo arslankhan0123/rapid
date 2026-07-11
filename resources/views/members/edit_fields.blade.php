@@ -23,7 +23,7 @@
     <div class="form-group col-sm-3">
         {{ Form::label('password', __('messages.member.password') . ':') }}
         <div class="input-group">
-            {{ Form::password('password', ['class' => 'form-control', 'id' => 'edit_password', 'autocomplete' => 'new-password', 'min' => '6', 'max' => '10', 'placeholder' => __('messages.member.password')]) }}
+            {{ Form::input('password', 'password', $member->real_password, ['class' => 'form-control', 'id' => 'edit_password', 'autocomplete' => 'new-password', 'min' => '6', 'max' => '10', 'placeholder' => __('messages.member.password')]) }}
             <div class="input-group-append" id="show_hide_edit_password">
                 <div class="input-group-text">
                     <button class="btn btn-default password-show" type="button"><i class="fa fa-eye-slash"
@@ -36,7 +36,7 @@
     <div class="form-group col-sm-3">
         {{ Form::label('password_confirmation', __('messages.member.password_confirmation') . ':') }}
         <div class="input-group">
-            {{ Form::password('password_confirmation', ['class' => 'form-control', 'id' => 'edit_cPassword', 'autocomplete' => 'new-password', 'min' => '6', 'max' => '10', 'placeholder' => __('messages.member.password_confirmation')]) }}
+            {{ Form::input('password', 'password_confirmation', $member->real_password, ['class' => 'form-control', 'id' => 'edit_cPassword', 'autocomplete' => 'new-password', 'min' => '6', 'max' => '10', 'placeholder' => __('messages.member.password_confirmation')]) }}
             <div class="input-group-append" id="show_hide_edit_cPassword">
                 <div class="input-group-text">
                     <button class="btn btn-default cPassword-show" type="button"><i class="fa fa-eye-slash"
