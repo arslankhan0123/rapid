@@ -146,6 +146,10 @@
                                         <strong>{{ Form::label('basic_salary', __('messages.employees.basic_salary')) }}</strong>
                                         <p style="color: #555;">{{ $employee->basic_salary }}</p>
                                     </div>
+                                    <div class="form-group col-sm-12 col-md-3">
+                                        <strong>{{ Form::label('currency', __('messages.employees.currency')) }}</strong>
+                                        <p style="color: #555;">{{ $employee->currency->name ?? 'N/A' }}</p>
+                                    </div>
                                     {{-- <div class="form-group col-sm-12 col-md-3">
                                         <strong>
                                             {{ Form::label('transport_allowance', __('messages.employees.transport_allowance')) }}</strong>

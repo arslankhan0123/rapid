@@ -218,6 +218,11 @@ class Employee extends Model
 
     public function leaveApplications()
     {
-        return $this->hasMany(LeaveApplication::class, '');
+        return $this->hasMany(LeaveApplication::class, 'employee_id');
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(\App\Models\Currency::class, 'currency_id');
     }
 }

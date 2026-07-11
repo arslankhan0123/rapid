@@ -521,21 +521,21 @@
                     </li> --}}
 
                     {{-- @canany(['view_employees', 'create_employees', 'delete_employees']) --}}
-                    <li class="side-menus {{ Request::is('admin/casual-employees*') ? 'active   submenu' : '' }}">
+                    <!-- <li class="side-menus {{ Request::is('admin/casual-employees*') ? 'active   submenu' : '' }}">
                         <a href=" {{ route('casual.employees.index') }} "><i class="fas fa-lg fa-user-tie"></i>
                             <span class="menu-text-wrap">{{ __('messages.casual_employees.name') }}</span>
                         </a>
-                    </li>
+                    </li> -->
                     {{--       @endcanany --}}
 
 
-                    <li
+                    <!-- <li
                         class="side-menus {{ Request::is('admin/casual-employee-timesheets*') ? 'active submenu' : '' }}">
                         <a href="{{ route('casual-employee-timesheets.index') }}">
                             <i class="fas fa-lg fa-clock"></i>
                             <span class="menu-text-wrap">Casual Employee Timesheets</span>
                         </a>
-                    </li>
+                    </li> -->
 
 
                 </ul>
@@ -1332,12 +1332,12 @@
         </li> --}}
         @canany(['view_safety_materials', 'create_safety_materials', 'update_safety_materials',
             'delete_safety_materials'])
-            <li class="nav-item side-menus {{ Request::is('safety-materials*') ? 'active' : '' }}">
+            <!-- <li class="nav-item side-menus {{ Request::is('safety-materials*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('safety-materials.index') }}">
                     <i class="nav-icon fa-lg fas fa-hard-hat"></i>
                     <span class="menu-text-wrap">{{ __('messages.safety_materials.safety_materials') }}</span>
                 </a>
-            </li>
+            </li> -->
         @endcanany
         @canany(['view_company_loans', 'create_company_loans', 'update_company_loans', 'delete_company_loans'])
             <li class="nav-item side-menus {{ Request::is('admin/company-loans*') ? 'active' : '' }}">
@@ -1464,7 +1464,7 @@
         @canany(['view_sample_categories', 'create_sample_categories', 'update_sample_categories',
             'delete_sample_categories', 'view_sample_receiving', 'create_sample_receiving', 'update_sample_receiving',
             'delete_sample_receiving'])
-            <li class="nav-item dropdown side-menus">
+            <!-- <li class="nav-item dropdown side-menus">
                 <a class="nav-link has-dropdown" href="#"><i class="fas fa-lg fa-industry"></i>
                     <span>{{ __('messages.sample.menu') }}</span>
                 </a>
@@ -1484,15 +1484,15 @@
                         </li>
                     @endcanany
                 </ul>
-            </li>
+            </li> -->
         @endcanany
         {{-- simple End here --}}
         {{-- Certificate Start here --}}
         @canany(['view_certificate', 'create_certificate', 'update_certificate', 'delete_certificate'])
-            <li class="side-menus {{ Request::is('admin/certificate*') ? 'active   submenu' : '' }}">
+            <!-- <li class="side-menus {{ Request::is('admin/certificate*') ? 'active   submenu' : '' }}">
                 <a href="{{ route('certificate.index') }}"><i class="fas fa-lg fa-certificate"></i>
                     <span class="menu-text-wrap">{{ __('messages.certificate.menu') }}</span></a>
-            </li>
+            </li> -->
         @endcanany
         {{-- Certificate End here --}}
     </ul>
