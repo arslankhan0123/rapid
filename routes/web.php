@@ -112,6 +112,8 @@ use App\Http\Controllers\EmployeeSalaryController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\JobSourceController;
+
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\SalaryAdvanceController;
@@ -2033,6 +2035,17 @@ Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admi
         Route::get('locations/{location}/edit', [LocationController::class, 'edit'])->middleware('permission:update_locations')->name('locations.edit');
         Route::put('locations/{location}', [LocationController::class, 'update'])->middleware('permission:update_locations')->name('locations.update');
         Route::delete('locations/{location}', [LocationController::class, 'destroy'])->middleware('permission:delete_locations')->name('locations.destroy');
+    });
+
+    // Job Sources routes
+    Route::group(['middleware' => ['permission:view_job_sources|create_job_sources|update_job_sources|delete_job_sources']], function () {
+        Route::get('job-sources', [JobSourceController::class, 'index'])->name('job-sources.index');
+        Route::get('job-sources/create', [JobSourceController::class, 'create'])->middleware('permission:create_job_sources')->name('job-sources.create');
+        Route::post('job-sources', [JobSourceController::class, 'store'])->middleware('permission:create_job_sources')->name('job-sources.store');
+        Route::get('job-sources/{jobSource}/view', [JobSourceController::class, 'view'])->middleware('permission:view_job_sources')->name('job-sources.view');
+        Route::get('job-sources/{jobSource}/edit', [JobSourceController::class, 'edit'])->middleware('permission:update_job_sources')->name('job-sources.edit');
+        Route::put('job-sources/{jobSource}', [JobSourceController::class, 'update'])->middleware('permission:update_job_sources')->name('job-sources.update');
+        Route::delete('job-sources/{jobSource}', [JobSourceController::class, 'destroy'])->middleware('permission:delete_job_sources')->name('job-sources.destroy');
     });
 
     // cities routes

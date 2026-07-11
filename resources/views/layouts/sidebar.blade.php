@@ -1254,6 +1254,14 @@
                 </a>
             </li>
         @endcanany
+        @canany(['view_job_sources', 'create_job_sources', 'update_job_sources', 'delete_job_sources'])
+            <li class="side-menus {{ Request::is('admin/job-sources*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('job-sources.index') }}">
+                    <i class="fas fa-lg fa-briefcase"></i>
+                    <span class="menu-text-wrap">{{ __('messages.job_sources.states') }}</span>
+                </a>
+            </li>
+        @endcanany
         @can('manage_settings')
             <li class="nav-item side-menus {{ Request::is('admin/settings*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('settings.show', ['group' => 'company_information']) }}">
