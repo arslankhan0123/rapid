@@ -1450,6 +1450,7 @@ return [
         'bank_account_no' => "Account No",
         'iban_num' => 'IBAN Number',
         'basic_salary' => "Basic Salary",
+        'currency' => "Currency",
         'transport_allowance' => "Allowance",
         'gross_salary' => "Gross Salary",
         'country' => "Country",

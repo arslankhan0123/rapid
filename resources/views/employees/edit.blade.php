@@ -205,6 +205,10 @@
                                     {{ Form::label('basic_salary', __('messages.employees.basic_salary') . ':') }}
                                     {{ Form::number('basic_salary', $employee->basic_salary, ['class' => 'form-control', 'id' => 'basic_salary', 'autocomplete' => 'off']) }}
                                 </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    {{ Form::label('currency_id', __('messages.employees.currency') . ':') }}
+                                    {{ Form::select('currency_id', $currencies, $employee->currency_id, ['class' => 'form-control', 'id' => 'currency_id', 'placeholder' => 'Select Currency']) }}
+                                </div>
                                 {{-- <div class="form-group col-sm-12 col-md-3">
                                         {{ Form::label('transport_allowance', __('messages.employees.transport_allowance') . ':') }}
                                         {{ Form::number('transport_allowance', $employee->transport_allowance, ['class' => 'form-control', 'id' => 'transport_allowance', 'autocomplete' => 'off']) }}

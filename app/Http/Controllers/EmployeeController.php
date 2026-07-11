@@ -57,13 +57,14 @@ class EmployeeController extends AppBaseController
         $designations = $this->employeeRepository->getDesignation();
         $company = $this->employeeRepository->getCompanyName();
         $countries = $this->employeeRepository->getCountries();
+        $currencies = $this->employeeRepository->getCurrencies();
         $shifts = $this->employeeRepository->getShifts();
         $nextNumber = DocumentNextNumber::getNextNumber('employee');
         $usersBranches = $this->getUsersBranches();
         $settings = Setting::pluck('value', 'key')->toArray();
         $prefix = $settings['employee_code_prefix'] ?? null;
 
-        return view('employees.create', compact(['departments', 'subDepartments', 'designations', 'company', 'countries', 'shifts', 'nextNumber', 'usersBranches', 'prefix']));
+        return view('employees.create', compact(['departments', 'subDepartments', 'designations', 'company', 'countries', 'currencies', 'shifts', 'nextNumber', 'usersBranches', 'prefix']));
     }
 
 
@@ -213,9 +214,10 @@ class EmployeeController extends AppBaseController
         $designations = $this->employeeRepository->getDesignation();
         $company = $this->employeeRepository->getCompanyName();
         $countries = $this->employeeRepository->getCountries();
+        $currencies = $this->employeeRepository->getCurrencies();
         $shifts = $this->employeeRepository->getShifts();
         $usersBranches = $this->getUsersBranches();
-        return view('employees.edit', compact(['departments', 'subDepartments', 'designations', 'company', 'employee', 'countries', 'shifts', 'usersBranches']));
+        return view('employees.edit', compact(['departments', 'subDepartments', 'designations', 'company', 'employee', 'countries', 'currencies', 'shifts', 'usersBranches']));
     }
     public function update(Employee $employee, UpdateEmployeeRequest $updateEmployeeRequest)
     {

@@ -95,6 +95,7 @@ class EmployeeRepository extends BaseRepository
             'blood_group',
             'religion',
             'code',
+            'currency_id',
             'iqama_no',
             'passport',
             'driving_license_no',
@@ -246,6 +247,10 @@ class EmployeeRepository extends BaseRepository
     {
         return Country::orderBy('name', 'asc')->pluck('name', 'id')->toArray();
     }
+    public function getCurrencies()
+    {
+        return \App\Models\Currency::orderBy('name', 'asc')->pluck('name', 'id')->toArray();
+    }
     public function getDepartments()
     {
         return Department::pluck('name', 'id')->toArray();
@@ -326,6 +331,7 @@ class EmployeeRepository extends BaseRepository
             'blood_group',
             'religion',
             'code',
+            'currency_id',
             'iqama_no',
             'passport',
             'driving_license_no',
