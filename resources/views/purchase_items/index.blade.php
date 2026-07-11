@@ -152,12 +152,12 @@
                 },
                 {
                     data: function(row) {
-                        let price = row.price !== null && row.price !== undefined ? parseFloat(row.price).toFixed(2) :
+                        let price = row.cost_price !== null && row.cost_price !== undefined ? parseFloat(row.cost_price).toFixed(2) :
                             '0.00';
                         return price;
                     },
                     className: 'text-center',
-                    name: 'price',
+                    name: 'cost_price',
                     width: '7%'
                 },
                 {

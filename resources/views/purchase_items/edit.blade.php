@@ -53,8 +53,8 @@
                             {{ Form::number('cost_price', $item->cost_price ?? 0, ['class' => 'form-control', 'autocomplete' => 'off', 'step' => 'any']) }}
                         </div>
                         <div class="form-group  col-md-6">
-                            {{ Form::label('title', __('messages.purchase-items.price')) }}<span class="required">*</span>
-                            {{ Form::number('price', $item->price, ['class' => 'form-control', 'required', 'autocomplete' => 'off', 'step' => 'any']) }}
+                            {{ Form::label('title', __('messages.purchase-items.price')) }}
+                            {{ Form::number('price', $item->price, ['class' => 'form-control', 'autocomplete' => 'off', 'step' => 'any']) }}
                         </div>
                         <div class="form-group  col-md-6">
                             {{ Form::label('title', __('messages.purchase-items.stock')) }}

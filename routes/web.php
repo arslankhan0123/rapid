@@ -182,8 +182,8 @@ Route::get('download/invoice/{number}', [InvoiceController::class, 'downloadPDF'
 Route::get('/add-specs-columns', function () {
     if (!Illuminate\Support\Facades\Schema::hasColumn('purchase_items', 'specifications')) {
         Illuminate\Support\Facades\Schema::table('purchase_items', function ($table) {
-            $table->string('specifications')->nullable();
-            $table->string('processor')->nullable();
+            $table->longText('specifications')->nullable();
+            $table->longText('processor')->nullable();
             $table->string('ram')->nullable();
             $table->string('storage')->nullable();
             $table->string('casing')->nullable();
