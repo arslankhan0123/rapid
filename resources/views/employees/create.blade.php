@@ -87,7 +87,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-md-3">
                                     {{ Form::label('code', __('messages.employees.code')) }}<span class="required">*</span>
-                                    {{ Form::text('code', 'SM-' . $nextNumber, ['class' => 'form-control', 'required', 'readonly', 'id' => 'code', 'autocomplete' => 'off']) }}
+                                    {{ Form::text('code', 'UAE-' . $nextNumber, ['class' => 'form-control', 'required', 'id' => 'code', 'autocomplete' => 'off']) }}
                                 </div>
                                 <div class="form-group col-sm-12 col-md-6">
                                     {{ Form::label('title', __('messages.employees.employee_name')) }}<span
