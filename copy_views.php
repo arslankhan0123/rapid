@@ -1,7 +1,7 @@
 <?php
 
-$src = __DIR__ . '/resources/views/states';
-$dest = __DIR__ . '/resources/views/job_sources';
+$src = __DIR__ . '/resources/views/job_sources';
+$dest = __DIR__ . '/resources/views/job_recruiters';
 
 if (!is_dir($dest)) {
     mkdir($dest, 0777, true);
@@ -19,23 +19,20 @@ foreach ($files as $file) {
     if (is_file($srcPath)) {
         $content = file_get_contents($srcPath);
         
-        // Custom replacements for JobSource
-        $content = str_replace('route(\'states.', 'route(\'job-sources.', $content);
-        $content = str_replace('messages.states', 'messages.job_sources', $content);
-        $content = str_replace('states.table', 'job_sources.table', $content);
-        $content = str_replace('states.index', 'job_sources.index', $content);
+        $content = str_replace('route(\'job-sources.', 'route(\'job-recruiters.', $content);
+        $content = str_replace('messages.job_sources', 'messages.job_recruiters', $content);
+        $content = str_replace('job_sources.table', 'job_recruiters.table', $content);
+        $content = str_replace('job_sources.index', 'job_recruiters.index', $content);
         
-        $content = str_replace('State', 'Job Source', $content);
-        $content = str_replace('States', 'Job Sources', $content);
+        $content = str_replace('Job Source', 'Job Recruiter', $content);
+        $content = str_replace('Job Sources', 'Job Recruiters', $content);
         
-        // Variable replacements
-        $content = str_replace('$state', '$jobSource', $content);
+        $content = str_replace('$jobSource', '$jobRecruiter', $content);
         
-        // Field replacements
-        $content = str_replace('country_id', 'description', $content);
-        
-        // Specific adjustments for JobSource description
-        // In the views, country_id was a select. We will need to change description to a textarea or input.
+        // Form name replacement if 'name' was used for recruiter_name
+        $content = str_replace('\'name\'', '\'recruiter_name\'', $content);
+        $content = str_replace('$jobRecruiter->name', '$jobRecruiter->recruiter_name', $content);
+        $content = str_replace('row.name', 'row.recruiter_name', $content);
         
         file_put_contents($destPath, $content);
         echo "Created: $destPath\n";

@@ -1345,6 +1345,17 @@ return [
         'saved' => 'Job Source Saved Successfully.',
         'list' => 'Job Sources List',
     ],
+    'job_recruiters' => [
+        'states' => 'Job Recruiters',
+        'name' => 'Recruiter Name',
+        'add' => 'Add Job Recruiter',
+        'edit' => 'Edit Job Recruiter',
+        'view' => 'View Job Recruiter',
+        'delete' => 'Delete Job Recruiter',
+        'saved' => 'Job Recruiter Saved Successfully.',
+        'list' => 'Job Recruiters List',
+    ],
+
 
     'areas' => [
         'name' => 'Area',

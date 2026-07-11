@@ -6,11 +6,11 @@ $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
 $permissions = [
-    ['name' => 'view_job_sources', 'display_name' => 'View', 'type' => 'Job Sources'],
-    ['name' => 'create_job_sources', 'display_name' => 'Add', 'type' => 'Job Sources'],
-    ['name' => 'update_job_sources', 'display_name' => 'Edit', 'type' => 'Job Sources'],
-    ['name' => 'delete_job_sources', 'display_name' => 'Delete', 'type' => 'Job Sources'],
-    ['name' => 'manage_job_sources', 'display_name' => 'Manage', 'type' => 'Job Sources'],
+    ['name' => 'view_job_recruiters', 'display_name' => 'View', 'type' => 'Job Recruiters'],
+    ['name' => 'create_job_recruiters', 'display_name' => 'Add', 'type' => 'Job Recruiters'],
+    ['name' => 'update_job_recruiters', 'display_name' => 'Edit', 'type' => 'Job Recruiters'],
+    ['name' => 'delete_job_recruiters', 'display_name' => 'Delete', 'type' => 'Job Recruiters'],
+    ['name' => 'manage_job_recruiters', 'display_name' => 'Manage', 'type' => 'Job Recruiters'],
 ];
 
 foreach ($permissions as $perm) {

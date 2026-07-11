@@ -113,6 +113,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\JobSourceController;
+use App\Http\Controllers\JobRecruiterController;
+
 
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\AreaController;
@@ -2047,6 +2049,18 @@ Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admi
         Route::put('job-sources/{jobSource}', [JobSourceController::class, 'update'])->middleware('permission:update_job_sources')->name('job-sources.update');
         Route::delete('job-sources/{jobSource}', [JobSourceController::class, 'destroy'])->middleware('permission:delete_job_sources')->name('job-sources.destroy');
     });
+
+    // Job Recruiters routes
+    Route::group(['middleware' => ['permission:view_job_recruiters|create_job_recruiters|update_job_recruiters|delete_job_recruiters']], function () {
+        Route::get('job-recruiters', [JobRecruiterController::class, 'index'])->name('job-recruiters.index');
+        Route::get('job-recruiters/create', [JobRecruiterController::class, 'create'])->middleware('permission:create_job_recruiters')->name('job-recruiters.create');
+        Route::post('job-recruiters', [JobRecruiterController::class, 'store'])->middleware('permission:create_job_recruiters')->name('job-recruiters.store');
+        Route::get('job-recruiters/{jobRecruiter}/view', [JobRecruiterController::class, 'view'])->middleware('permission:view_job_recruiters')->name('job-recruiters.view');
+        Route::get('job-recruiters/{jobRecruiter}/edit', [JobRecruiterController::class, 'edit'])->middleware('permission:update_job_recruiters')->name('job-recruiters.edit');
+        Route::put('job-recruiters/{jobRecruiter}', [JobRecruiterController::class, 'update'])->middleware('permission:update_job_recruiters')->name('job-recruiters.update');
+        Route::delete('job-recruiters/{jobRecruiter}', [JobRecruiterController::class, 'destroy'])->middleware('permission:delete_job_recruiters')->name('job-recruiters.destroy');
+    });
+
 
     // cities routes
     Route::group(['middleware' => ['permission:view_cities|create_cities|update_cities|delete_cities']], function () {

@@ -1262,6 +1262,14 @@
                 </a>
             </li>
         @endcanany
+        @canany(['view_job_recruiters', 'create_job_recruiters', 'update_job_recruiters', 'delete_job_recruiters'])
+            <li class="side-menus {{ Request::is('admin/job-recruiters*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('job-recruiters.index') }}">
+                    <i class="fas fa-lg fa-user-tie"></i>
+                    <span class="menu-text-wrap">{{ __('messages.job_recruiters.states') }}</span>
+                </a>
+            </li>
+        @endcanany
         @can('manage_settings')
             <li class="nav-item side-menus {{ Request::is('admin/settings*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('settings.show', ['group' => 'company_information']) }}">
