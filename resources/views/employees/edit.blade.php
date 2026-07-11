@@ -135,6 +135,15 @@
                                     {{ Form::email('email', $employee->email, ['class' => 'form-control', 'id' => 'email', 'autocomplete' => 'off']) }}
                                 </div>
 
+                                <div class="form-group col-sm-12 col-md-3">
+                                    {{ Form::label('linkedin_url', __('messages.employees.linkedin_url') . ':') }}
+                                    {{ Form::text('linkedin_url', $employee->linkedin_url, ['class' => 'form-control', 'id' => 'linkedin_url', 'autocomplete' => 'off']) }}
+                                </div>
+
+                                <div class="form-group col-sm-12 col-md-3">
+                                    {{ Form::label('facebook_url', __('messages.employees.facebook_url') . ':') }}
+                                    {{ Form::text('facebook_url', $employee->facebook_url, ['class' => 'form-control', 'id' => 'facebook_url', 'autocomplete' => 'off']) }}
+                                </div>
 
                                 <div class="form-group col-sm-12 col-md-3">
                                     {{ Form::label('title', __('messages.employees.joining_date') . ':') }}<span
@@ -288,6 +297,10 @@
                                 <div class="form-group col-sm-12 col-md-6">
                                     {{ Form::label('iban_num', __('messages.employees.iban_num') . ':') }}
                                     {{ Form::text('iban_num', $employee->iban_num, ['class' => 'form-control', 'id' => 'iban_num', 'autocomplete' => 'off']) }}
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12">
+                                    {{ Form::label('router_number', __('messages.employees.router_number') . ':') }}
+                                    {{ Form::text('router_number', $employee->router_number, ['class' => 'form-control', 'id' => 'router_number', 'autocomplete' => 'off']) }}
                                 </div>
                             </div>
                         </div>

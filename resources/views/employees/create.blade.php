@@ -125,6 +125,15 @@
                                     {{ Form::email('email', null, ['class' => 'form-control', 'id' => 'email', 'autocomplete' => 'off']) }}
                                 </div>
 
+                                <div class="form-group col-sm-12 col-md-3">
+                                    {{ Form::label('linkedin_url', __('messages.employees.linkedin_url')) }}
+                                    {{ Form::text('linkedin_url', null, ['class' => 'form-control', 'id' => 'linkedin_url', 'autocomplete' => 'off']) }}
+                                </div>
+
+                                <div class="form-group col-sm-12 col-md-3">
+                                    {{ Form::label('facebook_url', __('messages.employees.facebook_url')) }}
+                                    {{ Form::text('facebook_url', null, ['class' => 'form-control', 'id' => 'facebook_url', 'autocomplete' => 'off']) }}
+                                </div>
 
                                 <div class="form-group col-sm-12 col-md-3">
                                     {{ Form::label('title', __('messages.employees.joining_date')) }}<span
@@ -294,6 +303,10 @@
                                 <div class="form-group col-sm-12 col-md-6">
                                     {{ Form::label('iban_num', __('messages.employees.iban_num')) }}
                                     {{ Form::text('iban_num', null, ['class' => 'form-control', 'id' => 'iban_num', 'autocomplete' => 'off']) }}
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12">
+                                    {{ Form::label('router_number', __('messages.employees.router_number')) }}
+                                    {{ Form::text('router_number', null, ['class' => 'form-control', 'id' => 'router_number', 'autocomplete' => 'off']) }}
                                 </div>
                             </div>
                         </div>

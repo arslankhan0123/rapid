@@ -125,6 +125,9 @@ class EmployeeRepository extends BaseRepository
             'branch_id',
             'absent_allowance_deduction',
             'insurance_apply',
+            'linkedin_url',
+            'facebook_url',
+            'router_number',
         ]);
 
         DB::beginTransaction();
@@ -353,6 +356,9 @@ class EmployeeRepository extends BaseRepository
             'branch_id',
             'absent_allowance_deduction',
             'insurance_apply',
+            'linkedin_url',
+            'facebook_url',
+            'router_number',
         ]);
 
         DB::beginTransaction();

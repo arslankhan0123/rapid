@@ -1399,6 +1399,9 @@ return [
         'list' => "List"
     ],
     'employees' => [
+        'linkedin_url' => 'LinkedIn URL',
+        'facebook_url' => 'Facebook URL',
+        'router_number' => 'Router Number',
         'absent_allowance_deduction' => "Absent Allowances Deduction",
         'id_expire' => "Near Expiry ID This Month",
         'expire_date' => "Expire Date",

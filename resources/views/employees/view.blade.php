@@ -85,6 +85,21 @@
                                         <p style="color: #555;">{{ $employee->email }}</p>
                                     </div>
 
+                                    <div class="form-group col-sm-12 col-md-3">
+                                        <strong>{{ Form::label('linkedin_url', __('messages.employees.linkedin_url')) }}</strong>
+                                        <p style="color: #555;">{{ $employee->linkedin_url ?? 'N/A' }}</p>
+                                    </div>
+
+                                    <div class="form-group col-sm-12 col-md-3">
+                                        <strong>{{ Form::label('facebook_url', __('messages.employees.facebook_url')) }}</strong>
+                                        <p style="color: #555;">{{ $employee->facebook_url ?? 'N/A' }}</p>
+                                    </div>
+
+                                    <div class="form-group col-sm-12 col-md-3">
+                                        <strong>{{ Form::label('router_number', __('messages.employees.router_number')) }}</strong>
+                                        <p style="color: #555;">{{ $employee->router_number ?? 'N/A' }}</p>
+                                    </div>
+
 
                                     <div class="form-group col-sm-12 col-md-3">
                                         <strong>{{ Form::label('title', __('messages.employees.joining_date')) }}</strong>
