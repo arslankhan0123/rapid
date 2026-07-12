@@ -1489,16 +1489,16 @@ Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admi
 
 
     // Leads routes
-    Route::group(['middleware' => ['permission:view_leads|create_leads|update_leads|delete_leads']], function () {
+    Route::group(['middleware' => ['permission:view_leads|create_leads|update_leads|delete_leads|manage_leads']], function () {
 
         Route::get('leads', [LeadController::class, 'index'])->name('leads.index');
-        Route::get('leads/create/{customerId?}', [LeadController::class, 'create'])->middleware('permission:create_leads')->name('leads.create');
-        Route::post('leads', [LeadController::class, 'store'])->middleware('permission:create_leads')->name('leads.store');
+        Route::get('leads/create/{customerId?}', [LeadController::class, 'create'])->middleware('permission:create_leads|manage_leads')->name('leads.create');
+        Route::post('leads', [LeadController::class, 'store'])->middleware('permission:create_leads|manage_leads')->name('leads.store');
         // Route::get('leads/{lead}', [LeadController::class, 'show'])->name('leads.show');
-        Route::get('leads/{lead}', [LeadController::class, 'view'])->middleware('permission:view_leads')->name('leads.show');
-        Route::get('leads/{lead}/edit', [LeadController::class, 'edit'])->middleware('permission:update_leads')->name('leads.edit');
-        Route::put('leads/{lead}', [LeadController::class, 'update'])->middleware('permission:update_leads')->name('leads.update');
-        Route::delete('leads/{lead}', [LeadController::class, 'destroy'])->middleware('permission:delete_leads')->name('leads.destroy');
+        Route::get('leads/{lead}', [LeadController::class, 'view'])->middleware('permission:view_leads|manage_leads')->name('leads.show');
+        Route::get('leads/{lead}/edit', [LeadController::class, 'edit'])->middleware('permission:update_leads|manage_leads')->name('leads.edit');
+        Route::put('leads/{lead}', [LeadController::class, 'update'])->middleware('permission:update_leads|manage_leads')->name('leads.update');
+        Route::delete('leads/{lead}', [LeadController::class, 'destroy'])->middleware('permission:delete_leads|manage_leads')->name('leads.destroy');
 
 
         Route::put(

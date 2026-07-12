@@ -804,14 +804,14 @@
                             </a>
                         </li>
                     @endcan
-                    @can('view_leads')
+                    @canany(['view_leads', 'manage_leads'])
                         <li class="side-menus {{ Request::is('admin/leads*') ? 'active' : '' }}">
                             <a class="nav-link" href="{{ route('leads.index') }}">
                                 <i class="fas fa-lg fa-tty"></i><span
                                     class="menu-text-wrap">{{ __('messages.leads') }}</span>
                             </a>
                         </li>
-                    @endcan
+                    @endcanany
                 </ul>
             </li>
         @endcanany
