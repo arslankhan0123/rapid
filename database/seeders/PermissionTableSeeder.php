@@ -352,7 +352,34 @@ class PermissionTableSeeder extends Seeder
                 'type' => 'Master Accounts',
                 'display_name' => 'Delete Master Accounts',
             ],
+            [
+                'name' => 'manage_job_categories',
+                'type' => 'Job Categories',
+                'display_name' => 'Manage Job Categories',
+            ],
+            [
+                'name' => 'view_job_categories',
+                'type' => 'Job Categories',
+                'display_name' => 'View Job Categories',
+            ],
+            [
+                'name' => 'create_job_categories',
+                'type' => 'Job Categories',
+                'display_name' => 'Create Job Categories',
+            ],
+            [
+                'name' => 'update_job_categories',
+                'type' => 'Job Categories',
+                'display_name' => 'Update Job Categories',
+            ],
+            [
+                'name' => 'delete_job_categories',
+                'type' => 'Job Categories',
+                'display_name' => 'Delete Job Categories',
+            ],
         ]);
+
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         // Create all permissions (skip if already exists)
         foreach ($permissions as $permission) {
@@ -363,7 +390,8 @@ class PermissionTableSeeder extends Seeder
         $admin = User::find(1); // Assuming Admin user has ID 1
         if ($admin) {
             $masterPermissions = Permission::where('type', 'Master Accounts')->pluck('name')->toArray();
-            $admin->givePermissionTo($masterPermissions);
+            $jobCategoriesPermissions = Permission::where('type', 'Job Categories')->pluck('name')->toArray();
+            $admin->givePermissionTo(array_merge($masterPermissions, $jobCategoriesPermissions));
         }
     }
 }

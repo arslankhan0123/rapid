@@ -113,6 +113,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\JobSourceController;
+use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\JobRecruiterController;
 
 
@@ -2048,6 +2049,17 @@ Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admi
         Route::get('job-sources/{jobSource}/edit', [JobSourceController::class, 'edit'])->middleware('permission:update_job_sources')->name('job-sources.edit');
         Route::put('job-sources/{jobSource}', [JobSourceController::class, 'update'])->middleware('permission:update_job_sources')->name('job-sources.update');
         Route::delete('job-sources/{jobSource}', [JobSourceController::class, 'destroy'])->middleware('permission:delete_job_sources')->name('job-sources.destroy');
+    });
+
+    // Job Categories routes
+    Route::group(['middleware' => ['permission:view_job_categories|create_job_categories|update_job_categories|delete_job_categories|manage_job_categories']], function () {
+        Route::get('job-categories', [JobCategoryController::class, 'index'])->name('job-categories.index');
+        Route::get('job-categories/create', [JobCategoryController::class, 'create'])->middleware('permission:create_job_categories|manage_job_categories')->name('job-categories.create');
+        Route::post('job-categories', [JobCategoryController::class, 'store'])->middleware('permission:create_job_categories|manage_job_categories')->name('job-categories.store');
+        Route::get('job-categories/{jobCategory}/view', [JobCategoryController::class, 'view'])->middleware('permission:view_job_categories|manage_job_categories')->name('job-categories.view');
+        Route::get('job-categories/{jobCategory}/edit', [JobCategoryController::class, 'edit'])->middleware('permission:update_job_categories|manage_job_categories')->name('job-categories.edit');
+        Route::put('job-categories/{jobCategory}', [JobCategoryController::class, 'update'])->middleware('permission:update_job_categories|manage_job_categories')->name('job-categories.update');
+        Route::delete('job-categories/{jobCategory}', [JobCategoryController::class, 'destroy'])->middleware('permission:delete_job_categories|manage_job_categories')->name('job-categories.destroy');
     });
 
     // Job Recruiters routes
