@@ -115,6 +115,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\JobSourceController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\JobSkillController;
+use App\Http\Controllers\JobPositionController;
 use App\Http\Controllers\JobRecruiterController;
 
 
@@ -2072,6 +2073,17 @@ Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admi
         Route::get('job-skills/{jobSkill}/edit', [JobSkillController::class, 'edit'])->middleware('permission:update_job_skills|manage_job_skills')->name('job-skills.edit');
         Route::put('job-skills/{jobSkill}', [JobSkillController::class, 'update'])->middleware('permission:update_job_skills|manage_job_skills')->name('job-skills.update');
         Route::delete('job-skills/{jobSkill}', [JobSkillController::class, 'destroy'])->middleware('permission:delete_job_skills|manage_job_skills')->name('job-skills.destroy');
+    });
+
+    // Job Positions routes
+    Route::group(['middleware' => ['permission:view_job_positions|create_job_positions|update_job_positions|delete_job_positions|manage_job_positions']], function () {
+        Route::get('job-positions', [JobPositionController::class, 'index'])->name('job-positions.index');
+        Route::get('job-positions/create', [JobPositionController::class, 'create'])->middleware('permission:create_job_positions|manage_job_positions')->name('job-positions.create');
+        Route::post('job-positions', [JobPositionController::class, 'store'])->middleware('permission:create_job_positions|manage_job_positions')->name('job-positions.store');
+        Route::get('job-positions/{jobPosition}/view', [JobPositionController::class, 'view'])->middleware('permission:view_job_positions|manage_job_positions')->name('job-positions.view');
+        Route::get('job-positions/{jobPosition}/edit', [JobPositionController::class, 'edit'])->middleware('permission:update_job_positions|manage_job_positions')->name('job-positions.edit');
+        Route::put('job-positions/{jobPosition}', [JobPositionController::class, 'update'])->middleware('permission:update_job_positions|manage_job_positions')->name('job-positions.update');
+        Route::delete('job-positions/{jobPosition}', [JobPositionController::class, 'destroy'])->middleware('permission:delete_job_positions|manage_job_positions')->name('job-positions.destroy');
     });
 
     // Job Recruiters routes

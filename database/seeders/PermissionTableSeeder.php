@@ -402,6 +402,31 @@ class PermissionTableSeeder extends Seeder
                 'type' => 'Job Skills',
                 'display_name' => 'Delete Job Skills',
             ],
+            [
+                'name' => 'manage_job_positions',
+                'type' => 'Job Positions',
+                'display_name' => 'Manage Job Positions',
+            ],
+            [
+                'name' => 'view_job_positions',
+                'type' => 'Job Positions',
+                'display_name' => 'View Job Positions',
+            ],
+            [
+                'name' => 'create_job_positions',
+                'type' => 'Job Positions',
+                'display_name' => 'Create Job Positions',
+            ],
+            [
+                'name' => 'update_job_positions',
+                'type' => 'Job Positions',
+                'display_name' => 'Update Job Positions',
+            ],
+            [
+                'name' => 'delete_job_positions',
+                'type' => 'Job Positions',
+                'display_name' => 'Delete Job Positions',
+            ],
         ]);
 
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
@@ -417,7 +442,8 @@ class PermissionTableSeeder extends Seeder
             $masterPermissions = Permission::where('type', 'Master Accounts')->pluck('name')->toArray();
             $jobCategoriesPermissions = Permission::where('type', 'Job Categories')->pluck('name')->toArray();
             $jobSkillsPermissions = Permission::where('type', 'Job Skills')->pluck('name')->toArray();
-            $admin->givePermissionTo(array_merge($masterPermissions, $jobCategoriesPermissions, $jobSkillsPermissions));
+            $jobPositionsPermissions = Permission::where('type', 'Job Positions')->pluck('name')->toArray();
+            $admin->givePermissionTo(array_merge($masterPermissions, $jobCategoriesPermissions, $jobSkillsPermissions, $jobPositionsPermissions));
         }
     }
 }

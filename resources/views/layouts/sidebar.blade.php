@@ -1278,6 +1278,14 @@
                 </a>
             </li>
         @endcanany
+        @canany(['view_job_positions', 'create_job_positions', 'update_job_positions', 'delete_job_positions', 'manage_job_positions'])
+            <li class="side-menus {{ Request::is('admin/job-positions*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('job-positions.index') }}">
+                    <i class="fas fa-lg fa-briefcase"></i>
+                    <span class="menu-text-wrap">Job Positions</span>
+                </a>
+            </li>
+        @endcanany
         @canany(['view_job_recruiters', 'create_job_recruiters', 'update_job_recruiters', 'delete_job_recruiters'])
             <li class="side-menus {{ Request::is('admin/job-recruiters*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('job-recruiters.index') }}">
