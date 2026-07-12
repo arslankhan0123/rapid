@@ -47,7 +47,7 @@
                     'targets': [6],
                     'orderable': false,
                     'className': 'text-center',
-                    'width': '8%',
+                    'width': '15%',
                 },
                 {
                     'targets': [5],
@@ -100,22 +100,22 @@
                         let editUrl = route('job-skills.edit', row.id);
                         let actions = '';
                         
+                        @canany(['delete_job_skills', 'manage_job_skills'])
+                            actions += `<button title="Delete" class="btn btn-danger action-btn delete-btn has-icon" data-id="${row.id}" style="float:right;margin:2px;">
+                                            <i class="fa fa-trash"></i>
+                                        </button>`;
+                        @endcanany
+
                         @canany(['view_job_skills', 'manage_job_skills'])
-                            actions += `<a title="View" class="btn btn-warning action-btn has-icon" href="${viewUrl}">
+                            actions += `<a title="View" class="btn btn-info action-btn has-icon view-btn" href="${viewUrl}" style="float:right;margin:2px;">
                                             <i class="fa fa-eye"></i>
                                         </a>`;
                         @endcanany
                         
                         @canany(['update_job_skills', 'manage_job_skills'])
-                            actions += `<a title="Edit" class="btn btn-primary action-btn edit-btn has-icon" href="${editUrl}">
+                            actions += `<a title="Edit" class="btn btn-warning action-btn edit-btn has-icon" href="${editUrl}" style="float:right;margin:2px;">
                                             <i class="fa fa-edit"></i>
                                         </a>`;
-                        @endcanany
-                        
-                        @canany(['delete_job_skills', 'manage_job_skills'])
-                            actions += `<button title="Delete" class="btn btn-danger action-btn delete-btn has-icon" data-id="${row.id}">
-                                            <i class="fa fa-trash"></i>
-                                        </button>`;
                         @endcanany
                         
                         return actions;
