@@ -25,7 +25,7 @@ class UpdateJobCategoryRequest extends FormRequest
     public function rules()
     {
         $rules = JobCategory::$rules;
-        $rules['category_code'] = $rules['category_code'] . ',' . $this->route('job_category')->id;
+        $rules['category_code'] = $rules['category_code'] . ',' . $this->route('jobCategory')->id;
         return $rules;
     }
 }

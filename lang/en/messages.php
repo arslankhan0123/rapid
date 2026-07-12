@@ -1334,6 +1334,18 @@ return [
         'country' => "Country",
         'select_country' => "Select Country",
     ],
+    'job_categories' => [
+        'states' => 'Job Categories',
+        'name' => 'Category Name',
+        'description' => 'Category Description',
+        'add' => 'Add Job Category',
+        'edit' => 'Edit Job Category',
+        'view' => 'View Job Category',
+        'delete' => 'Delete Job Category',
+        'saved' => 'Job Category Saved Successfully.',
+        'updated' => 'Job Category Updated Successfully.',
+        'deleted' => 'Job Category Deleted Successfully.',
+    ],
     'job_sources' => [
         'states' => 'Job Sources',
         'name' => 'Source Name',
