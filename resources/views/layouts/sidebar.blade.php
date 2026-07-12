@@ -1270,6 +1270,14 @@
                 </a>
             </li>
         @endcanany
+        @canany(['view_job_skills', 'create_job_skills', 'update_job_skills', 'delete_job_skills', 'manage_job_skills'])
+            <li class="side-menus {{ Request::is('admin/job-skills*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('job-skills.index') }}">
+                    <i class="fas fa-lg fa-graduation-cap"></i>
+                    <span class="menu-text-wrap">Job Skills</span>
+                </a>
+            </li>
+        @endcanany
         @canany(['view_job_recruiters', 'create_job_recruiters', 'update_job_recruiters', 'delete_job_recruiters'])
             <li class="side-menus {{ Request::is('admin/job-recruiters*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('job-recruiters.index') }}">

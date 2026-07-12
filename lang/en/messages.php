@@ -1346,6 +1346,18 @@ return [
         'updated' => 'Job Category Updated Successfully.',
         'deleted' => 'Job Category Deleted Successfully.',
     ],
+    'job_skills' => [
+        'states' => 'Job Skills',
+        'name' => 'Skill Name',
+        'description' => 'Skill Description',
+        'add' => 'Add Job Skill',
+        'edit' => 'Edit Job Skill',
+        'view' => 'View Job Skill',
+        'delete' => 'Delete Job Skill',
+        'saved' => 'Job Skill Saved Successfully.',
+        'updated' => 'Job Skill Updated Successfully.',
+        'deleted' => 'Job Skill Deleted Successfully.',
+    ],
     'job_sources' => [
         'states' => 'Job Sources',
         'name' => 'Source Name',

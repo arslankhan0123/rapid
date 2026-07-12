@@ -114,6 +114,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\JobSourceController;
 use App\Http\Controllers\JobCategoryController;
+use App\Http\Controllers\JobSkillController;
 use App\Http\Controllers\JobRecruiterController;
 
 
@@ -2060,6 +2061,17 @@ Route::middleware(['auth', 'xss', 'checkUserStatus', 'checkRoleUrl', 'super_admi
         Route::get('job-categories/{jobCategory}/edit', [JobCategoryController::class, 'edit'])->middleware('permission:update_job_categories|manage_job_categories')->name('job-categories.edit');
         Route::put('job-categories/{jobCategory}', [JobCategoryController::class, 'update'])->middleware('permission:update_job_categories|manage_job_categories')->name('job-categories.update');
         Route::delete('job-categories/{jobCategory}', [JobCategoryController::class, 'destroy'])->middleware('permission:delete_job_categories|manage_job_categories')->name('job-categories.destroy');
+    });
+
+    // Job Skills routes
+    Route::group(['middleware' => ['permission:view_job_skills|create_job_skills|update_job_skills|delete_job_skills|manage_job_skills']], function () {
+        Route::get('job-skills', [JobSkillController::class, 'index'])->name('job-skills.index');
+        Route::get('job-skills/create', [JobSkillController::class, 'create'])->middleware('permission:create_job_skills|manage_job_skills')->name('job-skills.create');
+        Route::post('job-skills', [JobSkillController::class, 'store'])->middleware('permission:create_job_skills|manage_job_skills')->name('job-skills.store');
+        Route::get('job-skills/{jobSkill}/view', [JobSkillController::class, 'view'])->middleware('permission:view_job_skills|manage_job_skills')->name('job-skills.view');
+        Route::get('job-skills/{jobSkill}/edit', [JobSkillController::class, 'edit'])->middleware('permission:update_job_skills|manage_job_skills')->name('job-skills.edit');
+        Route::put('job-skills/{jobSkill}', [JobSkillController::class, 'update'])->middleware('permission:update_job_skills|manage_job_skills')->name('job-skills.update');
+        Route::delete('job-skills/{jobSkill}', [JobSkillController::class, 'destroy'])->middleware('permission:delete_job_skills|manage_job_skills')->name('job-skills.destroy');
     });
 
     // Job Recruiters routes
