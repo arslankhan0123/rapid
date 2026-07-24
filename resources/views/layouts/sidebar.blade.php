@@ -1254,44 +1254,63 @@
                 </a>
             </li>
         @endcanany
-        @canany(['view_job_sources', 'create_job_sources', 'update_job_sources', 'delete_job_sources'])
-            <li class="side-menus {{ Request::is('admin/job-sources*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('job-sources.index') }}">
+        @canany(['view_job_sources', 'create_job_sources', 'update_job_sources', 'delete_job_sources',
+            'view_job_categories', 'create_job_categories', 'update_job_categories', 'delete_job_categories',
+            'manage_job_categories', 'view_job_skills', 'create_job_skills', 'update_job_skills',
+            'delete_job_skills', 'manage_job_skills', 'view_job_positions', 'create_job_positions',
+            'update_job_positions', 'delete_job_positions', 'manage_job_positions', 'view_job_recruiters',
+            'create_job_recruiters', 'update_job_recruiters', 'delete_job_recruiters'])
+            <li class="nav-item dropdown side-menus">
+                <a class="nav-link has-dropdown" href="#">
                     <i class="fas fa-lg fa-briefcase"></i>
-                    <span class="menu-text-wrap">{{ __('messages.job_sources.states') }}</span>
+                    <span class="menu-text-wrap">Jobs</span>
                 </a>
-            </li>
-        @endcanany
-        @canany(['view_job_categories', 'create_job_categories', 'update_job_categories', 'delete_job_categories', 'manage_job_categories'])
-            <li class="side-menus {{ Request::is('admin/job-categories*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('job-categories.index') }}">
-                    <i class="fas fa-lg fa-tags"></i>
-                    <span class="menu-text-wrap">Job Categories</span>
-                </a>
-            </li>
-        @endcanany
-        @canany(['view_job_skills', 'create_job_skills', 'update_job_skills', 'delete_job_skills', 'manage_job_skills'])
-            <li class="side-menus {{ Request::is('admin/job-skills*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('job-skills.index') }}">
-                    <i class="fas fa-lg fa-graduation-cap"></i>
-                    <span class="menu-text-wrap">Job Skills</span>
-                </a>
-            </li>
-        @endcanany
-        @canany(['view_job_positions', 'create_job_positions', 'update_job_positions', 'delete_job_positions', 'manage_job_positions'])
-            <li class="side-menus {{ Request::is('admin/job-positions*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('job-positions.index') }}">
-                    <i class="fas fa-lg fa-briefcase"></i>
-                    <span class="menu-text-wrap">Job Positions</span>
-                </a>
-            </li>
-        @endcanany
-        @canany(['view_job_recruiters', 'create_job_recruiters', 'update_job_recruiters', 'delete_job_recruiters'])
-            <li class="side-menus {{ Request::is('admin/job-recruiters*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('job-recruiters.index') }}">
-                    <i class="fas fa-lg fa-user-tie"></i>
-                    <span class="menu-text-wrap">{{ __('messages.job_recruiters.states') }}</span>
-                </a>
+                <ul class="dropdown-menu side-menus">
+                    @canany(['view_job_sources', 'create_job_sources', 'update_job_sources', 'delete_job_sources'])
+                        <li class="side-menus {{ Request::is('admin/job-sources*') ? 'active submenu' : '' }}">
+                            <a href="{{ route('job-sources.index') }}">
+                                <i class="fas fa-lg fa-briefcase"></i>
+                                <span class="menu-text-wrap">{{ __('messages.job_sources.states') }}</span>
+                            </a>
+                        </li>
+                    @endcanany
+                    @canany(['view_job_categories', 'create_job_categories', 'update_job_categories',
+                        'delete_job_categories', 'manage_job_categories'])
+                        <li class="side-menus {{ Request::is('admin/job-categories*') ? 'active submenu' : '' }}">
+                            <a href="{{ route('job-categories.index') }}">
+                                <i class="fas fa-lg fa-tags"></i>
+                                <span class="menu-text-wrap">Job Categories</span>
+                            </a>
+                        </li>
+                    @endcanany
+                    @canany(['view_job_skills', 'create_job_skills', 'update_job_skills', 'delete_job_skills',
+                        'manage_job_skills'])
+                        <li class="side-menus {{ Request::is('admin/job-skills*') ? 'active submenu' : '' }}">
+                            <a href="{{ route('job-skills.index') }}">
+                                <i class="fas fa-lg fa-graduation-cap"></i>
+                                <span class="menu-text-wrap">Job Skills</span>
+                            </a>
+                        </li>
+                    @endcanany
+                    @canany(['view_job_positions', 'create_job_positions', 'update_job_positions',
+                        'delete_job_positions', 'manage_job_positions'])
+                        <li class="side-menus {{ Request::is('admin/job-positions*') ? 'active submenu' : '' }}">
+                            <a href="{{ route('job-positions.index') }}">
+                                <i class="fas fa-lg fa-briefcase"></i>
+                                <span class="menu-text-wrap">Job Positions</span>
+                            </a>
+                        </li>
+                    @endcanany
+                    @canany(['view_job_recruiters', 'create_job_recruiters', 'update_job_recruiters',
+                        'delete_job_recruiters'])
+                        <li class="side-menus {{ Request::is('admin/job-recruiters*') ? 'active submenu' : '' }}">
+                            <a href="{{ route('job-recruiters.index') }}">
+                                <i class="fas fa-lg fa-user-tie"></i>
+                                <span class="menu-text-wrap">{{ __('messages.job_recruiters.states') }}</span>
+                            </a>
+                        </li>
+                    @endcanany
+                </ul>
             </li>
         @endcanany
         @can('manage_settings')
